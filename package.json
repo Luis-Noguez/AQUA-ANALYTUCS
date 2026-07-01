@@ -1,0 +1,8 @@
+{
+  "name": "aquaanalytics-web",
+  "version": "1.0.0",
+  "description": "AquaAnalytics Dashboard - Academias de Natación",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}
