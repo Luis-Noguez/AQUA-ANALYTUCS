@@ -118,16 +118,13 @@ const STORED_PWD = sessionStorage.getItem('aq_pwd');
 if(STORED_PWD){ adminPwd=STORED_PWD; showMain(); }
 
 function doLogin(){
-  const pwd=document.getElementById('pwd-input').value;
-  // Verificar contra el servidor
-  fetch('/api/get-data?sede=_meta',{headers:{'x-admin-password':pwd}})
-    .then(r=>{
-      if(r.ok){ adminPwd=pwd; sessionStorage.setItem('aq_pwd',pwd); showMain(); }
-      else document.getElementById('login-err').style.display='block';
-    }).catch(()=>{
-      // Si no hay servidor aún, aceptar cualquier pwd no vacía (se validará en el servidor al subir)
-      if(pwd){ adminPwd=pwd; sessionStorage.setItem('aq_pwd',pwd); showMain(); }
-    });
+  const pwd=document.getElementById('pwd-input').value.trim();
+  if(!pwd){ document.getElementById('login-err').style.display='block'; return; }
+  // La contraseña se valida en el servidor al momento de subir datos
+  // Aquí solo verificamos que no esté vacía y la guardamos en sesión
+  adminPwd=pwd;
+  sessionStorage.setItem('aq_pwd',pwd);
+  showMain();
 }
 function doLogout(){ sessionStorage.removeItem('aq_pwd'); adminPwd=''; document.getElementById('login-section').style.display='block'; document.getElementById('main-section').style.display='none'; }
 function showMain(){ document.getElementById('login-section').style.display='none'; document.getElementById('main-section').style.display='block'; loadMeta(); }
