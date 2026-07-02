@@ -13,11 +13,7 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body);
-    const { sede, data, mode, meta } = body;
-
-    console.log('update-data called:', { mode, sede, dataLength: data?.length });
-    console.log('ENV check - SITE_ID:', process.env.NETLIFY_SITE_ID ? 'SET' : 'MISSING');
-    console.log('ENV check - TOKEN:', process.env.NETLIFY_TOKEN ? 'SET' : 'MISSING');
+    const { sede, data, mode, meta, batch, isFirst } = body;
 
     const store = getStore({
       name: 'aquaanalytics',
@@ -31,36 +27,43 @@ exports.handler = async (event) => {
     }
 
     const key = 'sede_' + sede;
-    let existing = [];
-    try {
-      existing = await store.get(key, { type: 'json' }) || [];
-    } catch(e) {
-      existing = [];
-    }
 
     if (mode === 'full') {
+      // Batch mode: isFirst=true clears existing, subsequent batches append
+      let existing = [];
+      if (!isFirst) {
+        try {
+          existing = await store.get(key, { type: 'json' }) || [];
+        } catch(e) { existing = []; }
+      }
       const byId = {};
       existing.forEach(r => { byId[r.i] = r; });
       data.forEach(r => { byId[r.i] = r; });
       const merged = Object.values(byId);
-      console.log('Saving', merged.length, 'records for', sede);
       await store.setJSON(key, merged);
-      console.log('Saved OK for', sede);
+      return { statusCode: 200, body: JSON.stringify({ ok: true, records: merged.length }) };
+
     } else if (mode === 'partial') {
+      let existing = [];
+      try {
+        existing = await store.get(key, { type: 'json' }) || [];
+      } catch(e) { existing = []; }
       const byId = {};
       existing.forEach(r => { byId[r.i] = r; });
       data.forEach(upd => {
         if (byId[upd.i]) byId[upd.i] = { ...byId[upd.i], e: upd.e, b: upd.b, n: upd.n };
       });
       await store.setJSON(key, Object.values(byId));
+      return { statusCode: 200, body: JSON.stringify({ ok: true }) };
     }
 
-    return { statusCode: 200, body: JSON.stringify({ ok: true, records: data.length }) };
+    return { statusCode: 400, body: JSON.stringify({ error: 'Unknown mode' }) };
+
   } catch (err) {
     console.error('update-data ERROR:', err.message);
-    return { 
-      statusCode: 500, 
-      body: JSON.stringify({ error: err.message }) 
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message })
     };
   }
 };
