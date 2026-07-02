@@ -3,12 +3,7 @@ const { getStore } = require('@netlify/blobs');
 exports.handler = async (event) => {
   const sede = event.queryStringParameters?.sede || '_meta';
   try {
-    const store = getStore({
-      name: 'aquaanalytics',
-      siteID: process.env.SITE_ID || process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_TOKEN,
-      consistency: 'strong'
-    });
+    const store = getStore('aquaanalytics');
     const key = sede === '_meta' ? '_meta' : 'sede_' + sede;
     const data = await store.get(key, { type: 'json' });
     return {
