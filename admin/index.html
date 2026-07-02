@@ -201,14 +201,26 @@ async function doUpload(){
           if(sede&&sede!=='Sin sede'){if(!bySede[sede])bySede[sede]=[];bySede[sede].push(rec);}
         });
 
-        // Subir sede por sede
+        // Subir sede por sede en lotes de 500 registros
         const sedesAfectadas=Object.keys(bySede);
         let done=0;
         for(const sede of sedesAfectadas){
-          setStatus('loading',`Subiendo ${sede}… (${done+1}/${sedesAfectadas.length})`);
-          setProg(25+Math.round(done/sedesAfectadas.length*65));
-          const res=await fetch('/api/update-data',{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPwd},body:JSON.stringify({sede:safeName(sede),data:bySede[sede],mode:'full'})});
-          if(!res.ok){setStatus('err','Error al subir '+sede+': '+(await res.text()));return;}
+          const registros=bySede[sede];
+          const BATCH=500;
+          const totalBatches=Math.ceil(registros.length/BATCH);
+          for(let b=0;b<totalBatches;b++){
+            const batch=registros.slice(b*BATCH,(b+1)*BATCH);
+            const isFirst=b===0;
+            setStatus('loading',`Subiendo ${sede}… lote ${b+1}/${totalBatches} (${done+1}/${sedesAfectadas.length} sedes)`);
+            setProg(25+Math.round((done+b/totalBatches)/sedesAfectadas.length*65));
+            const res=await fetch('/api/update-data',{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPwd},
+              body:JSON.stringify({sede:safeName(sede),data:batch,mode:'full',batch:b,isFirst})});
+            if(!res.ok){
+              const errText=await res.text();
+              setStatus('err','Error al subir '+sede+' lote '+b+': '+errText);
+              return;
+            }
+          }
           done++;
         }
       } else {
