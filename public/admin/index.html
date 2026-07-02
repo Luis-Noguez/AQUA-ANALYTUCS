@@ -15,12 +15,12 @@ h1{font-size:18px;font-weight:600;color:#f1f5f9}
 .sub{font-size:12px;color:#64748b;margin-top:2px}
 .sep{height:1px;background:#334155;margin:20px 0}
 label{font-size:12px;font-weight:500;color:#94a3b8;display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
-input[type=password],input[type=text]{width:100%;padding:10px 14px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f1f5f9;font-size:14px;outline:none;transition:border-color .15s}
+input[type=password]{width:100%;padding:10px 14px;background:#0f172a;border:1px solid #334155;border-radius:8px;color:#f1f5f9;font-size:14px;outline:none;transition:border-color .15s}
 input:focus{border-color:#0891b2}
-.mode-btns{display:flex;gap:8px;margin-bottom:20px}
+.mode-btns{display:flex;gap:8px;margin-bottom:16px}
 .mode-btn{flex:1;padding:10px;border-radius:8px;border:1px solid #334155;background:transparent;color:#94a3b8;font-size:13px;cursor:pointer;transition:all .15s;text-align:center}
 .mode-btn.on{background:#0c4a6e;border-color:#0891b2;color:#38bdf8}
-.drop-zone{border:2px dashed #334155;border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.drop-zone{border:2px dashed #334155;border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
 .drop-zone:hover,.drop-zone.drag{border-color:#0891b2;background:#0c4a6e22}
 .drop-zone p{font-size:14px;color:#64748b;margin-top:8px}
 .drop-zone .icon{font-size:32px}
@@ -28,14 +28,12 @@ input[type=file]{display:none}
 .btn{width:100%;padding:12px;border-radius:8px;border:none;background:linear-gradient(135deg,#0e7490,#0891b2);color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s}
 .btn:hover{opacity:.9}
 .btn:disabled{opacity:.4;cursor:not-allowed}
-.status{margin-top:16px;padding:12px 14px;border-radius:8px;font-size:13px;display:none}
+.status{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:13px;display:none;line-height:1.5}
 .status.ok{background:#064e3b;border:1px solid #10b981;color:#6ee7b7;display:block}
 .status.err{background:#450a0a;border:1px solid #ef4444;color:#fca5a5;display:block}
 .status.loading{background:#0c4a6e;border:1px solid #0891b2;color:#7dd3fc;display:block}
-.prog{height:4px;background:#334155;border-radius:2px;overflow:hidden;margin-top:10px}
-.prog-fill{height:100%;background:linear-gradient(90deg,#0e7490,#06b6d4);border-radius:2px;transition:width .3s;width:0%}
-.login-section{display:block}
-.main-section{display:none}
+.prog{height:4px;background:#334155;border-radius:2px;overflow:hidden;margin-top:8px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#0e7490,#06b6d4);border-radius:2px;transition:width .2s;width:0%}
 .hint{font-size:11px;color:#475569;margin-top:6px;line-height:1.5}
 </style>
 </head>
@@ -46,33 +44,25 @@ input[type=file]{display:none}
     <div><h1>AquaAnalytics</h1><p class="sub">Panel de Administración</p></div>
   </div>
 
-  <!-- LOGIN -->
-  <div class="login-section" id="login-section">
+  <div id="login-section">
     <div style="margin-bottom:16px">
       <label>Contraseña de administrador</label>
       <input type="password" id="pwd-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
     <button class="btn" onclick="doLogin()">Ingresar</button>
-    <div class="status err" id="login-err">Contraseña incorrecta</div>
+    <div class="status err" id="login-err" style="display:none">Contraseña incorrecta</div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main-section" id="main-section">
+  <div id="main-section" style="display:none">
     <div class="sep"></div>
-
     <div style="margin-bottom:16px">
       <label>Tipo de actualización</label>
       <div class="mode-btns">
-        <div class="mode-btn on" id="btn-full" onclick="setMode('full')">
-          📥 Base completa<br><span style="font-size:10px;opacity:.7">Nuevas inscripciones</span>
-        </div>
-        <div class="mode-btn" id="btn-partial" onclick="setMode('partial')">
-          🔄 Solo bajas<br><span style="font-size:10px;opacity:.7">Bajas y reactivaciones</span>
-        </div>
+        <div class="mode-btn on" id="btn-full" onclick="setMode('full')">📥 Base completa<br><span style="font-size:10px;opacity:.7">Nuevas inscripciones</span></div>
+        <div class="mode-btn" id="btn-partial" onclick="setMode('partial')">🔄 Solo bajas<br><span style="font-size:10px;opacity:.7">Bajas y reactivaciones</span></div>
       </div>
-      <p class="hint" id="mode-hint">Sube la base completa o un archivo con nuevos inscritos. Detecta y corrige automáticamente columnas invertidas. Vacío, NA o N/A en Fecha Baja = activo vigente.</p>
+      <p class="hint" id="mode-hint">Sube la base completa o nuevos inscritos. Vacío, NA o N/A en Fecha Baja = activo vigente. Detecta columnas invertidas automáticamente.</p>
     </div>
-
     <label>Archivo Excel</label>
     <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
          ondragover="event.preventDefault();this.classList.add('drag')"
@@ -83,22 +73,54 @@ input[type=file]{display:none}
       <p style="font-size:11px;color:#475569;margin-top:4px">.xlsx · .xls · .csv</p>
     </div>
     <input type="file" id="file-input" accept=".xlsx,.xls,.csv" onchange="handleFile(this.files[0])"/>
-
     <button class="btn" id="upload-btn" onclick="doUpload()" disabled>Subir y actualizar dashboard</button>
     <div class="status" id="upload-status"></div>
     <div class="prog" id="prog-wrap" style="display:none"><div class="prog-fill" id="prog-fill"></div></div>
-
     <div class="sep"></div>
     <div style="display:flex;justify-content:space-between;align-items:center">
-      <p style="font-size:12px;color:#475569">Última actualización: <span id="last-update">—</span></p>
+      <p style="font-size:12px;color:#475569">Últ. actualización: <span id="last-update">—</span></p>
       <button onclick="doLogout()" style="background:none;border:none;color:#475569;font-size:12px;cursor:pointer">Cerrar sesión</button>
     </div>
   </div>
 </div>
 
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC5Q3FQl6O048p7w8rk7Rd7wBbY6fS9jms",
+  authDomain: "aquaanalytics-8b4dd.firebaseapp.com",
+  projectId: "aquaanalytics-8b4dd",
+  storageBucket: "aquaanalytics-8b4dd.firebasestorage.app",
+  messagingSenderId: "596258795795",
+  appId: "1:596258795795:web:3f3dd2d534248ec368eae6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+window.db = db;
+window.fsDoc = doc;
+window.fsSet = setDoc;
+window.fsGet = getDoc;
+window.fsUpdate = updateDoc;
+window.firebaseReady = true;
+
+// Load last update
+try {
+  const snap = await getDoc(doc(db, 'meta', 'info'));
+  if(snap.exists() && snap.data().lastUpdate){
+    document.getElementById('last-update').textContent = new Date(snap.data().lastUpdate).toLocaleString('es-MX');
+  }
+} catch(e){}
+</script>
+
 <script>
-const SEDES=['Coapa','El Rosario','Santa Cecilia','Mundo E','Insurgentes Norte','Exhibimex','Pedregal','Querétaro','Aragón','Coacalco','Los Reyes'];
-const SEDE_CANON={aragon:'Aragón',aragon:'Aragón',coacalco:'Coacalco',coapa:'Coapa',elrosario:'El Rosario',exhibimex:'Exhibimex',insurgentesnorte:'Insurgentes Norte',losreyes:'Los Reyes',mundoe:'Mundo E',pedregal:'Pedregal',queretaro:'Querétaro',santacecilia:'Santa Cecilia',santracecilia:'Santa Cecilia'};
+const ADMIN_PASSWORD = 'AquaAnalytics2026!';
+const SEDES = ['Coapa','El Rosario','Santa Cecilia','Mundo E','Insurgentes Norte','Exhibimex','Pedregal','Querétaro','Aragón','Coacalco','Los Reyes'];
+const SEDE_CANON = {aragon:'Aragón',aragón:'Aragón',coacalco:'Coacalco',coapa:'Coapa',elrosario:'El Rosario',exhibimex:'Exhibimex',insurgentesnorte:'Insurgentes Norte',losreyes:'Los Reyes',mundoe:'Mundo E',pedregal:'Pedregal',queretaro:'Querétaro',querétaro:'Querétaro',santacecilia:'Santa Cecilia',santracecilia:'Santa Cecilia'};
+
 function normSede(raw){if(!raw)return'Sin sede';const k=String(raw).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z]/g,'');return SEDE_CANON[k]||String(raw).trim();}
 function isBlankOrNA(v){if(v===null||v===undefined)return true;const s=String(v).trim().toUpperCase();return s===''||s==='NA'||s==='N/A'||s==='SIN REGISTRO'||s==='NAT';}
 function parseDate(val){
@@ -111,71 +133,43 @@ function parseDate(val){
 function looksId(v){return/^\d+$/.test(String(v).trim());}
 function looksEst(v){const s=String(v).trim().toLowerCase();return s==='activo'||s==='inactivo';}
 
-let mode='full', selectedFile=null, adminPwd='';
+let mode='full', selectedFile=null;
 
 // Login
-const STORED_PWD = sessionStorage.getItem('aq_pwd');
-if(STORED_PWD){ adminPwd=STORED_PWD; showMain(); }
+const storedPwd = sessionStorage.getItem('aq_admin_pwd');
+if(storedPwd===ADMIN_PASSWORD) showMain();
 
 function doLogin(){
   const pwd=document.getElementById('pwd-input').value.trim();
-  if(!pwd){ document.getElementById('login-err').style.display='block'; return; }
-  // La contraseña se valida en el servidor al momento de subir datos
-  // Aquí solo verificamos que no esté vacía y la guardamos en sesión
-  adminPwd=pwd;
-  sessionStorage.setItem('aq_pwd',pwd);
-  showMain();
+  if(pwd===ADMIN_PASSWORD){sessionStorage.setItem('aq_admin_pwd',pwd);showMain();}
+  else{document.getElementById('login-err').style.display='block';}
 }
-function doLogout(){ sessionStorage.removeItem('aq_pwd'); adminPwd=''; document.getElementById('login-section').style.display='block'; document.getElementById('main-section').style.display='none'; }
-function showMain(){ document.getElementById('login-section').style.display='none'; document.getElementById('main-section').style.display='block'; loadMeta(); }
-
-function loadMeta(){
-  fetch('/api/get-data?sede=_meta').then(r=>r.json()).then(d=>{
-    if(d.lastUpdate) document.getElementById('last-update').textContent=new Date(d.lastUpdate).toLocaleString('es-MX');
-  }).catch(()=>{});
-}
-
+function doLogout(){sessionStorage.removeItem('aq_admin_pwd');document.getElementById('login-section').style.display='block';document.getElementById('main-section').style.display='none';}
+function showMain(){document.getElementById('login-section').style.display='none';document.getElementById('main-section').style.display='block';}
 function setMode(m){
   mode=m;
   document.getElementById('btn-full').classList.toggle('on',m==='full');
   document.getElementById('btn-partial').classList.toggle('on',m==='partial');
-  document.getElementById('mode-hint').textContent=m==='full'
-    ?'Sube la base completa o un archivo con nuevos inscritos. Detecta y corrige automáticamente columnas invertidas. Vacío, NA o N/A en Fecha Baja = activo vigente.'
-    :'Solo ID + Status + Fecha de Baja. Actualiza estatus sin borrar el resto de datos del usuario. Reactivación automática si Status = Activo.';
+  document.getElementById('mode-hint').textContent=m==='full'?'Sube la base completa o nuevos inscritos. Vacío, NA o N/A en Fecha Baja = activo vigente. Detecta columnas invertidas automáticamente.':'Solo ID + Status + Fecha de Baja. Actualiza estatus sin borrar el resto de datos del usuario. Reactivación automática si Status = Activo.';
 }
-
-function handleDrop(e){
-  e.preventDefault();
-  document.getElementById('drop-zone').classList.remove('drag');
-  const f=e.dataTransfer.files[0];
-  if(f) handleFile(f);
-}
-function handleFile(f){
-  selectedFile=f;
-  document.getElementById('drop-label').textContent='✅ '+f.name;
-  document.getElementById('upload-btn').disabled=false;
-}
+function handleDrop(e){e.preventDefault();document.getElementById('drop-zone').classList.remove('drag');const f=e.dataTransfer.files[0];if(f)handleFile(f);}
+function handleFile(f){selectedFile=f;document.getElementById('drop-label').textContent='✅ '+f.name;document.getElementById('upload-btn').disabled=false;}
 
 async function doUpload(){
-  if(!selectedFile) return;
-  setStatus('loading','Leyendo archivo…');
-  setProg(10);
-
+  if(!selectedFile||!window.firebaseReady)return;
+  setStatus('loading','Leyendo archivo…');setProg(5);
   const reader=new FileReader();
   reader.onload=async(ev)=>{
     try{
       const wb=XLSX.read(ev.target.result,{type:'array',cellDates:true});
       const json=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:'',raw:true});
-      if(!json.length){setStatus('err','El archivo está vacío');return;}
-
-      setStatus('loading','Procesando '+json.length+' registros…');setProg(25);
-
+      if(!json.length){setStatus('err','Archivo vacío');return;}
       const keys=Object.keys(json[0]);
       const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/gi,'');
       const find=(...pats)=>{for(const p of pats){const k=keys.find(k=>norm(k).includes(p));if(k)return k;}return null;};
       let kId=find('id'),kEst=find('estatus','status'),kSede=find('sede'),kMed=find('medio','canal'),kPro=find('promo'),kSex=find('sexo'),kEda=find('edad'),kIns=find('inscripci','inscr'),kBaj=find('baja','fechabaja');
 
-      // Detección de columnas invertidas (permanente)
+      // Detección columnas invertidas
       let swapped=false;
       if(kId&&kEst&&json.length>0){
         const s=json.slice(0,20);
@@ -183,9 +177,11 @@ async function doUpload(){
       }
 
       const TODAY=new Date();
+      setStatus('loading','Procesando '+json.length+' registros…');setProg(15);
+      await new Promise(r=>setTimeout(r,10));
 
       if(mode==='full'){
-        // Agrupar por sede
+        // Group by sede
         const bySede={};
         json.forEach((row,idx)=>{
           const estatusRaw=(row[kEst]||'').toString().trim();
@@ -197,25 +193,43 @@ async function doUpload(){
           let estadia=null;
           if(inscDate){const iD=new Date(inscDate+'T00:00:00');const ref=bajaDate?new Date(bajaDate+'T00:00:00'):(isActivo?TODAY:null);if(ref)estadia=Math.round((ref-iD)/86400000);}
           const sede=normSede(kSede?row[kSede]:null);
+          if(!sede||sede==='Sin sede')return;
           const rec={i:kId?String(row[kId]||'').trim():'NEW'+idx,e:estatusRaw,s:sede,m:kMed?(row[kMed]||'').toString().trim():'',p:kPro?(row[kPro]||'').toString().trim():'',x:kSex?(row[kSex]||'').toString().trim().toUpperCase():'',a:kEda?(parseInt(row[kEda])||null):null,d:inscDate,b:isActivo?null:bajaDate,t:estadia,n:isActivo};
-          if(sede&&sede!=='Sin sede'){if(!bySede[sede])bySede[sede]=[];bySede[sede].push(rec);}
+          if(!bySede[sede])bySede[sede]=[];
+          bySede[sede].push(rec);
         });
 
-        // Subir sede por sede
+        // Save each sede to Firestore
         const sedesAfectadas=Object.keys(bySede);
         let done=0;
         for(const sede of sedesAfectadas){
-          setStatus('loading',`Subiendo ${sede}… (${done+1}/${sedesAfectadas.length})`);
-          setProg(25+Math.round(done/sedesAfectadas.length*65));
-          const res=await fetch('/api/update-data',{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPwd},body:JSON.stringify({sede:safeName(sede),data:bySede[sede],mode:'full'})});
-          if(!res.ok){setStatus('err','Error al subir '+sede+': '+(await res.text()));return;}
+          setStatus('loading',`Guardando ${sede}… (${done+1}/${sedesAfectadas.length})`);
+          setProg(15+Math.round(done/sedesAfectadas.length*80));
+
+          // Get existing data and merge
+          const docRef=window.fsDoc(window.db,'sedes',sede);
+          let existing=[];
+          try{const snap=await window.fsGet(docRef);if(snap.exists())existing=snap.data().records||[];}catch(e){}
+          const byId={};
+          existing.forEach(r=>{byId[r.i]=r;});
+          bySede[sede].forEach(r=>{byId[r.i]=r;});
+          const merged=Object.values(byId);
+
+          // Firestore has 1MB doc limit — split into chunks of 800 records
+          const CHUNK=800;
+          const chunks=[];
+          for(let i=0;i<merged.length;i+=CHUNK)chunks.push(merged.slice(i,i+CHUNK));
+          for(let ci=0;ci<chunks.length;ci++){
+            const chunkDocRef=window.fsDoc(window.db,'sedes',sede+(chunks.length>1?'_'+ci:''));
+            await window.fsSet(chunkDocRef,{records:chunks[ci],sede,chunk:ci,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
+          }
           done++;
         }
+
       } else {
-        // Modo parcial: bajas/reactivaciones por sede
+        // Partial: bajas/reactivaciones
         const bySede={};
-        let notFound=0;
-        json.forEach((row,idx)=>{
+        json.forEach(row=>{
           const bajaRaw=kBaj?row[kBaj]:null;
           const bajaBlank=isBlankOrNA(bajaRaw);
           const bajaDate=bajaBlank?null:parseDate(bajaRaw);
@@ -223,38 +237,46 @@ async function doUpload(){
           const isActivo=estatusRaw.toLowerCase()==='activo'||bajaBlank;
           const sede=normSede(kSede?row[kSede]:null);
           const id=kId?String(row[kId]||'').trim():'';
-          if(!id) return;
-          const upd={i:id,e:estatusRaw||(isActivo?'Activo':'Inactivo'),b:isActivo?null:bajaDate,n:isActivo,s:sede};
-          if(sede&&sede!=='Sin sede'){if(!bySede[sede])bySede[sede]=[];bySede[sede].push(upd);}
+          if(!id||!sede||sede==='Sin sede')return;
+          if(!bySede[sede])bySede[sede]=[];
+          bySede[sede].push({i:id,e:estatusRaw||(isActivo?'Activo':'Inactivo'),b:isActivo?null:bajaDate,n:isActivo});
         });
+
         const sedesAfectadas=Object.keys(bySede);
-        let done=0;
+        let done=0,notFound=0;
         for(const sede of sedesAfectadas){
           setStatus('loading',`Actualizando ${sede}… (${done+1}/${sedesAfectadas.length})`);
-          setProg(25+Math.round(done/sedesAfectadas.length*65));
-          const res=await fetch('/api/update-data',{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPwd},body:JSON.stringify({sede:safeName(sede),data:bySede[sede],mode:'partial'})});
-          if(!res.ok){setStatus('err','Error al actualizar '+sede);return;}
+          setProg(15+Math.round(done/sedesAfectadas.length*80));
+          const docRef=window.fsDoc(window.db,'sedes',sede);
+          let existing=[];
+          try{const snap=await window.fsGet(docRef);if(snap.exists())existing=snap.data().records||[];}catch(e){}
+          const byId={};
+          existing.forEach(r=>{byId[r.i]=r;});
+          bySede[sede].forEach(upd=>{
+            if(byId[upd.i])byId[upd.i]={...byId[upd.i],e:upd.e,b:upd.b,n:upd.n};
+            else notFound++;
+          });
+          await window.fsSet(docRef,{records:Object.values(byId),sede,updatedAt:new Date().toISOString()});
           done++;
         }
+        if(notFound>0)console.warn(notFound+' IDs no encontrados en la base');
       }
 
-      // Guardar meta
-      await fetch('/api/update-data',{method:'POST',headers:{'Content-Type':'application/json','x-admin-password':adminPwd},body:JSON.stringify({mode:'meta',meta:{lastUpdate:new Date().toISOString()}})});
-
+      // Save meta
+      await window.fsSet(window.fsDoc(window.db,'meta','info'),{lastUpdate:new Date().toISOString()});
       setProg(100);
-      const swapMsg=swapped?' ⚠️ Columnas ID/Estatus invertidas detectadas y corregidas automáticamente.':'';
-      setStatus('ok','✅ Dashboard actualizado correctamente.'+swapMsg+' Todos los usuarios verán los nuevos datos al instante.');
+      const swapMsg=swapped?' ⚠️ Columnas ID/Estatus corregidas automáticamente.':'';
+      setStatus('ok','✅ Dashboard actualizado. Todos los usuarios verán los nuevos datos al instante.'+swapMsg);
       document.getElementById('last-update').textContent=new Date().toLocaleString('es-MX');
       selectedFile=null;
       document.getElementById('drop-label').textContent='Arrastra tu archivo aquí o haz clic para seleccionar';
       document.getElementById('upload-btn').disabled=true;
 
-    }catch(err){ setStatus('err','Error: '+err.message); }
+    }catch(err){setStatus('err','Error: '+err.message);console.error(err);}
   };
   reader.readAsArrayBuffer(selectedFile);
 }
 
-function safeName(s){return s.replace(/\s/g,'_').replace('é','e').replace('á','a').replace('í','i').replace('ñ','n');}
 function setStatus(type,msg){const el=document.getElementById('upload-status');el.className='status '+type;el.textContent=msg;}
 function setProg(p){document.getElementById('prog-wrap').style.display='block';document.getElementById('prog-fill').style.width=p+'%';}
 </script>
