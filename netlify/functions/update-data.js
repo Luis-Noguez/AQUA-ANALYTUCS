@@ -14,13 +14,9 @@ exports.handler = async (event) => {
   try {
     const body = JSON.parse(event.body);
     const { sede, data, mode, meta } = body;
-
-    const store = getStore({
-      name: 'aquaanalytics',
-      siteID: process.env.SITE_ID || process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_TOKEN,
-      consistency: 'strong'
-    });
+    
+    // getStore() sin argumentos usa el contexto automático de Netlify Functions
+    const store = getStore('aquaanalytics');
 
     if (mode === 'meta') {
       await store.setJSON('_meta', meta);
@@ -42,9 +38,7 @@ exports.handler = async (event) => {
       const byId = {};
       existing.forEach(r => { byId[r.i] = r; });
       data.forEach(upd => {
-        if (byId[upd.i]) {
-          byId[upd.i] = { ...byId[upd.i], e: upd.e, b: upd.b, n: upd.n };
-        }
+        if (byId[upd.i]) byId[upd.i] = { ...byId[upd.i], e: upd.e, b: upd.b, n: upd.n };
       });
       await store.setJSON(key, Object.values(byId));
     }
