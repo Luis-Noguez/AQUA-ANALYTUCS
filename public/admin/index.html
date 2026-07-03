@@ -206,21 +206,27 @@ async function doUpload(){
           setStatus('loading',`Guardando ${sede}… (${done+1}/${sedesAfectadas.length})`);
           setProg(15+Math.round(done/sedesAfectadas.length*80));
 
-          // Get existing data and merge
-          const docRef=window.fsDoc(window.db,'sedes',sede);
+          // Get ALL existing chunks for this sede and merge
+          const safeSede=sede.replace(/\s/g,'_').replace(/é/g,'e').replace(/á/g,'a').replace(/í/g,'i').replace(/ñ/g,'n').replace(/ó/g,'o').replace(/ú/g,'u');
           let existing=[];
-          try{const snap=await window.fsGet(docRef);if(snap.exists())existing=snap.data().records||[];}catch(e){}
+          for(let ci=0;ci<60;ci++){
+            try{
+              const snap=await window.fsGet(window.fsDoc(window.db,'sedes',safeSede+'_'+ci));
+              if(!snap.exists()) break;
+              existing=existing.concat(snap.data().records||[]);
+            }catch(e){break;}
+          }
           const byId={};
           existing.forEach(r=>{byId[r.i]=r;});
           bySede[sede].forEach(r=>{byId[r.i]=r;});
           const merged=Object.values(byId);
 
-          // Firestore has 1MB doc limit — split into chunks of 800 records
-          const CHUNK=800;
+          // Save back in chunks of 500 records
+          const CHUNK=500;
           const chunks=[];
           for(let i=0;i<merged.length;i+=CHUNK)chunks.push(merged.slice(i,i+CHUNK));
           for(let ci=0;ci<chunks.length;ci++){
-            const chunkDocRef=window.fsDoc(window.db,'sedes',sede+(chunks.length>1?'_'+ci:''));
+            const chunkDocRef=window.fsDoc(window.db,'sedes',safeSede+'_'+ci);
             await window.fsSet(chunkDocRef,{records:chunks[ci],sede,chunk:ci,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
           }
           done++;
