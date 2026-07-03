@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Glosario · AquaAnalytics</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;color:#0f172a;min-height:100vh}
+
+/* ── HEADER ── */
+header{background:#fff;border-bottom:1px solid #e2e8f0;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.hdr-inner{max-width:1000px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#0e7490,#06b6d4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1000px;margin:0 auto;padding:32px 24px;display:flex;gap:28px}
+
+/* ── SIDEBAR TOC ── */
+.toc{width:200px;flex-shrink:0}
+.toc-card{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px;position:sticky;top:72px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.toc-title{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;padding:4px 8px 8px;border-bottom:1px solid #f1f5f9;margin-bottom:6px}
+.toc-link{display:block;padding:5px 8px;font-size:12px;font-weight:500;color:#475569;text-decoration:none;border-radius:6px;transition:all .15s}
+.toc-link:hover{background:#f0f9ff;color:#0891b2}
+.toc-link.active{background:#e0f2fe;color:#0e7490;font-weight:600}
+.toc-sep{height:1px;background:#f1f5f9;margin:6px 0}
+.toc-cat{font-size:10px;font-weight:700;color:#cbd5e1;text-transform:uppercase;letter-spacing:.06em;padding:5px 8px 2px}
+
+/* ── MAIN CONTENT ── */
+main{flex:1;min-width:0}
+
+/* Section */
+.section{margin-bottom:40px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid #e2e8f0}
+.section-icon{font-size:22px}
+.section-title{font-size:18px;font-weight:800;color:#0f172a}
+.section-sub{font-size:12px;color:#94a3b8;margin-top:2px}
+
+/* Term card */
+.term{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:20px 22px;margin-bottom:12px;scroll-margin-top:80px;transition:box-shadow .15s}
+.term:hover{box-shadow:0 4px 14px rgba(0,0,0,.08);border-color:#cbd5e1}
+.term-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.term-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:9999px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.tag-metric{background:#dbeafe;color:#1d4ed8}
+.tag-calc{background:#dcfce7;color:#15803d}
+.tag-estrategia{background:#ede9fe;color:#6d28d9}
+.tag-operativo{background:#fef3c7;color:#92400e}
+.tag-financiero{background:#fee2e2;color:#b91c1c}
+
+.term-name{font-size:16px;font-weight:800;color:#0f172a}
+.term-en{font-size:12px;color:#94a3b8;font-style:italic;margin-top:1px}
+.term-def{font-size:13.5px;color:#475569;line-height:1.7;margin-bottom:10px}
+.term-def strong{color:#0f172a;font-weight:600}
+
+/* Formula box */
+.formula{background:#f8fafc;border:1px solid #e2e8f0;border-left:3px solid #0891b2;border-radius:0 8px 8px 0;padding:10px 14px;margin:10px 0;font-family:monospace;font-size:13px;color:#0f172a;line-height:1.6}
+.formula .label{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;font-family:inherit}
+
+/* Example box */
+.example{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:12.5px;color:#15803d;line-height:1.6}
+.example::before{content:'Ejemplo: ';font-weight:700}
+
+/* Note box */
+.note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin:10px 0;font-size:12.5px;color:#92400e;line-height:1.6}
+.note::before{content:'💡 ';font-weight:700}
+
+/* Values table */
+.vtable{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
+.vtable th{background:#f8fafc;border:1px solid #e2e8f0;padding:7px 12px;font-weight:700;color:#475569;text-align:left}
+.vtable td{border:1px solid #e2e8f0;padding:7px 12px;color:#0f172a}
+.vtable tr:hover td{background:#f0f9ff}
+
+/* Context chip */
+.context{display:inline-flex;align-items:center;gap:4px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:3px 10px;font-size:11px;color:#64748b;margin:3px 2px}
+
+/* Intro */
+.intro{background:linear-gradient(135deg,#e0f2fe,#f0f9ff);border:1px solid #bae6fd;border-radius:14px;padding:20px 22px;margin-bottom:28px}
+.intro-title{font-size:15px;font-weight:700;color:#0e7490;margin-bottom:6px}
+.intro-text{font-size:13px;color:#0c4a6e;line-height:1.65}
+
+/* Search */
+.search-wrap{position:relative;margin-bottom:20px}
+.search-wrap input{width:100%;padding:10px 14px 10px 38px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;background:#fff;outline:none;color:#0f172a;transition:border-color .15s}
+.search-wrap input:focus{border-color:#0891b2;box-shadow:0 0 0 3px rgba(8,145,178,.1)}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.hidden{display:none}
+
+/* Print */
+@media print{
+  header,  .toc, .search-wrap{display:none}
+  .wrap{display:block;padding:0}
+  .term{break-inside:avoid;box-shadow:none;border:1px solid #ccc}
+  body{font-size:12pt}
+}
+
+@media(max-width:700px){.toc{display:none}.wrap{padding:16px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-inner">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="logo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <path d="M2 12c1-4 4-7 10-7s9 3 10 7"/><path d="M2 17c1-2 4-3 10-3s9 1 10 3"/><circle cx="12" cy="12" r="2"/>
+        </svg>
+      </div>
+      <div>
+        <span style="font-weight:800;font-size:14px">AquaAnalytics</span>
+        <span style="font-size:12px;color:#94a3b8;margin-left:8px">· Glosario de Métricas</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button onclick="window.print()" style="padding:6px 14px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;font-size:12px;font-weight:600;color:#475569;cursor:pointer">🖨 Imprimir</button>
+      <a href="/" target="_blank" style="padding:6px 14px;border-radius:8px;background:#0891b2;font-size:12px;font-weight:600;color:#fff;text-decoration:none">← Dashboard</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- TOC -->
+  <aside class="toc">
+    <div class="toc-card">
+      <div class="toc-title">Contenido</div>
+      <div class="toc-cat">Métricas base</div>
+      <a class="toc-link" href="#inscrito">Inscrito</a>
+      <a class="toc-link" href="#activo">Activo / Inactivo</a>
+      <a class="toc-link" href="#retencion">Retención</a>
+      <a class="toc-link" href="#churn">Churn (Abandono)</a>
+      <a class="toc-link" href="#estadia">Estadía</a>
+      <div class="toc-sep"></div>
+      <div class="toc-cat">Análisis avanzado</div>
+      <a class="toc-link" href="#cohort">Cohorte</a>
+      <a class="toc-link" href="#ltv">LTV</a>
+      <a class="toc-link" href="#plateau">Plateau</a>
+      <a class="toc-link" href="#mediana">Mediana · Moda</a>
+      <a class="toc-link" href="#estacionalidad">Estacionalidad</a>
+      <div class="toc-sep"></div>
+      <div class="toc-cat">Financiero</div>
+      <a class="toc-link" href="#revenue">Revenue</a>
+      <a class="toc-link" href="#ticket">Ticket promedio</a>
+      <a class="toc-link" href="#roi">ROI</a>
+      <a class="toc-link" href="#payback">Payback</a>
+      <div class="toc-sep"></div>
+      <div class="toc-cat">Captación</div>
+      <a class="toc-link" href="#canal">Canal de captación</a>
+      <a class="toc-link" href="#promo">Promoción</a>
+      <div class="toc-sep"></div>
+      <div class="toc-cat">Operativo</div>
+      <a class="toc-link" href="#sede">Sede / Unidad</a>
+      <a class="toc-link" href="#cohorte-mes">Cohorte mensual</a>
+      <a class="toc-link" href="#equilibrio">Punto de equilibrio</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- Intro -->
+    <div class="intro">
+      <div class="intro-title">📘 Guía de referencia — AquaAnalytics</div>
+      <div class="intro-text">
+        Este glosario explica en español claro todos los términos, métricas y fórmulas que aparecen en el dashboard y los reportes avanzados.
+        Cada término incluye su definición, la fórmula exacta con la que se calcula en este sistema, un ejemplo práctico y el contexto de uso.
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" placeholder="Buscar término…" oninput="filterTerms(this.value)">
+    </div>
+    <div id="no-results" class="hidden" style="text-align:center;padding:30px;color:#94a3b8;font-size:14px">Sin resultados para esa búsqueda</div>
+
+    <!-- ════ SECCIÓN: MÉTRICAS BASE ════ -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">📊</span>
+        <div>
+          <div class="section-title">Métricas Base</div>
+          <div class="section-sub">Los indicadores fundamentales para entender la base de usuarios</div>
+        </div>
+      </div>
+
+      <!-- INSCRITO -->
+      <div class="term" id="inscrito">
+        <div class="term-header">
+          <span class="term-tag tag-operativo">Operativo</span>
+          <div>
+            <div class="term-name">Inscrito / Usuario inscrito</div>
+            <div class="term-en">Enrolled user</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Persona que en algún momento registró una membresía en cualquiera de las sedes. Un inscrito no necesariamente es un usuario activo — puede haber dado de baja hace años y seguir contando en el histórico total.
+          El total de inscritos es la <strong>base histórica acumulada</strong>, no la población actual.
+        </div>
+        <div class="formula">
+          <div class="label">Cálculo</div>
+          Total inscritos = número de filas en la base de datos con fecha de inscripción válida
+        </div>
+        <div class="note">En este sistema hay 104,497 inscritos históricos, pero solo 14,890 están activos hoy (14.2%). El 85.8% restante se dio de baja en algún momento.</div>
+      </div>
+
+      <!-- ACTIVO / INACTIVO -->
+      <div class="term" id="activo">
+        <div class="term-header">
+          <span class="term-tag tag-metric">Métrica</span>
+          <div>
+            <div class="term-name">Activo / Inactivo</div>
+            <div class="term-en">Active / Inactive member</div>
+          </div>
+        </div>
+        <div class="term-def">
+          <strong>Activo:</strong> usuario con membresía vigente a la fecha de corte (23/06/2026). Su fecha de baja es posterior a la fecha de corte o no tiene fecha de baja real.<br><br>
+          <strong>Inactivo:</strong> usuario que se dio de baja antes de la fecha de corte. Su membresía ya no genera ingresos.
+        </div>
+        <div class="formula">
+          <div class="label">Criterio en este sistema</div>
+          Activo   → ESTATUS = "Activo" O fecha_baja ≥ 2026-06-23<br>
+          Inactivo → ESTATUS ≠ "Activo" Y fecha_baja &lt; 2026-06-23
+        </div>
+        <div class="example">Si un usuario se inscribió en enero 2022 y su fecha de baja es el 24/06/2026, se considera activo porque aún tiene membresía vigente al momento del corte.</div>
+      </div>
+
+      <!-- RETENCIÓN -->
+      <div class="term" id="retencion">
+        <div class="term-header">
+          <span class="term-tag tag-metric">Métrica clave</span>
+          <div>
+            <div class="term-name">Tasa de Retención</div>
+            <div class="term-en">Retention Rate</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Porcentaje de usuarios que <strong>permanecen activos</strong> con respecto al total histórico inscrito. Es el indicador más importante de la salud de una sede: una sede que capta mucho pero retiene poco tiene un problema estructural.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula</div>
+          Retención (%) = (Activos actuales ÷ Total inscritos históricos) × 100
+        </div>
+        <div class="example">Sede Los Reyes: 1,199 activos / 2,375 inscritos = <strong>50.5% retención</strong>. Sede Coapa: 1,478 activos / 25,904 inscritos = <strong>5.7% retención</strong>. Los Reyes retiene ~9 veces mejor que Coapa en términos relativos.</div>
+        <div class="note">La retención se ve afectada por la antigüedad de la sede. Sedes más antiguas tienden a tener retención más baja porque acumulan más bajas históricas. Por eso es importante también analizar la retención por cohorte.</div>
+      </div>
+
+      <!-- CHURN -->
+      <div class="term" id="churn">
+        <div class="term-header">
+          <span class="term-tag tag-metric">Métrica clave</span>
+          <div>
+            <div class="term-name">Churn · Tasa de Abandono</div>
+            <div class="term-en">Churn Rate</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Porcentaje de usuarios que <strong>se dan de baja</strong> en un período. Es el complemento de la retención. Un churn alto significa que la sede pierde miembros rápidamente. El churn es especialmente crítico en los primeros 90 días: si un usuario no supera ese período, es muy difícil que vuelva.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula</div>
+          Churn (%) = 100% − Retención (%)<br><br>
+          O mensual: Churn mensual = (Bajas del mes ÷ Activos al inicio del mes) × 100
+        </div>
+        <div class="example">Si en junio hay 15,000 activos y se dan de baja 500, el churn mensual es 500/15,000 = <strong>3.3% mensual</strong>. Anualizado sería ~40% de pérdida anual.</div>
+        <div class="note">En este sistema el 17.4% de todos los inscritos (18,193 usuarios) se fueron <strong>antes de los 3 meses</strong>. Este es el período crítico donde se gana o se pierde el usuario.</div>
+      </div>
+
+      <!-- ESTADÍA -->
+      <div class="term" id="estadia">
+        <div class="term-header">
+          <span class="term-tag tag-calc">Calculado</span>
+          <div>
+            <div class="term-name">Estadía · Tiempo de permanencia</div>
+            <div class="term-en">Tenure / Length of stay</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Número de días (o meses) que un usuario ha estado o estuvo inscrito. Para usuarios <strong>inactivos</strong>, es la diferencia entre su fecha de baja y su fecha de inscripción. Para usuarios <strong>activos</strong>, se calcula hasta la fecha de corte del sistema (23/06/2026).
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula</div>
+          Estadía (días) = Fecha de baja − Fecha de inscripción<br><br>
+          Para activos: Estadía = 23/06/2026 − Fecha de inscripción<br><br>
+          En meses: Estadía (meses) = Estadía (días) ÷ 30.44<br>
+          En años:  Estadía (años)  = Estadía (días) ÷ 365.25
+        </div>
+        <div class="example">Usuario inscrito el 01/01/2023 con baja el 01/07/2023: estadía = 181 días = <strong>5.9 meses</strong>. Usuario activo inscrito el 01/01/2022: estadía = 01/01/2022 → 23/06/2026 = ~1,634 días = <strong>53.7 meses = 4.5 años</strong>.</div>
+      </div>
+    </div>
+
+    <!-- ════ SECCIÓN: ANÁLISIS AVANZADO ════ -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">🔬</span>
+        <div>
+          <div class="section-title">Análisis Avanzado</div>
+          <div class="section-sub">Métricas de mayor profundidad para decisiones estratégicas</div>
+        </div>
+      </div>
+
+      <!-- COHORTE -->
+      <div class="term" id="cohort">
+        <div class="term-header">
+          <span class="term-tag tag-estrategia">Estratégico</span>
+          <div>
+            <div class="term-name">Cohorte de retención</div>
+            <div class="term-en">Retention Cohort</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Grupo de usuarios que se inscribieron en el <strong>mismo período</strong> (mes o año). El análisis de cohortes responde: <em>"De todos los que entraron en 2022, ¿cuántos seguían activos a los 6 meses? ¿a los 12? ¿a los 24?"</em>. Permite ver si la calidad de los nuevos usuarios mejora o empeora con el tiempo, independientemente del volumen total.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula de retención de cohorte</div>
+          Retención cohorte X a mes M =<br>
+          (Usuarios del período X con estadía ≥ M meses) ÷ Total del período X × 100
+        </div>
+        <div class="example">Cohorte 2022 (1,500 inscritos ese año): a los 12 meses quedan 180 activos → retención 12m = 180/1,500 = <strong>12%</strong>. Cohorte 2024 (2,000 inscritos): a los 12 meses quedan 320 activos → retención 12m = <strong>16%</strong>. La cohorte 2024 es de mejor calidad.</div>
+        <table class="vtable" style="margin-top:12px">
+          <thead><tr><th>Cohorte</th><th>Inscritos</th><th>3 meses</th><th>6 meses</th><th>12 meses</th><th>24 meses</th></tr></thead>
+          <tbody>
+            <tr><td>2020</td><td>5,000</td><td>45%</td><td>25%</td><td>12%</td><td>6%</td></tr>
+            <tr><td>2022</td><td>8,000</td><td>50%</td><td>28%</td><td>15%</td><td>8%</td></tr>
+            <tr><td>2024</td><td>12,000</td><td>55%</td><td>32%</td><td>18%</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- LTV -->
+      <div class="term" id="ltv">
+        <div class="term-header">
+          <span class="term-tag tag-financiero">Financiero</span>
+          <div>
+            <div class="term-name">LTV · Valor de Vida del Cliente</div>
+            <div class="term-en">Lifetime Value (LTV / CLV)</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Ingreso total que genera un usuario durante toda su relación con la empresa. Es la métrica más importante para evaluar la rentabilidad real de cada canal de captación: un canal que trae muchos usuarios pero con estadía corta puede valer menos que uno que trae pocos pero muy fieles.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula utilizada en este sistema</div>
+          LTV = Estadía mediana (meses) × Ticket mensual promedio + Precio de inscripción<br><br>
+          Versión histórica:  LTV hist.  = Estadía med. × $226/mes + $1,087<br>
+          Versión actual 2026: LTV actual = Estadía med. × $500/mes + $1,087<br><br>
+          Nota: $226 = ticket ponderado real de toda la historia. $500 = estimado de precio actual de red.
+        </div>
+        <div class="example">Canal "Google": estadía mediana = 6 meses.<br>
+          LTV hist.  = 6 × $226 + $1,087 = $2,443 MXN por usuario<br>
+          LTV actual = 6 × $500 + $1,087 = $4,087 MXN por usuario</div>
+        <div class="note">Se usa la <strong>mediana</strong> de estadía (no el promedio) porque el promedio se infla por usuarios con estadías muy largas. La mediana representa al usuario típico real.</div>
+      </div>
+
+      <!-- PLATEAU -->
+      <div class="term" id="plateau">
+        <div class="term-header">
+          <span class="term-tag tag-estrategia">Estratégico</span>
+          <div>
+            <div class="term-name">Plateau · Punto de madurez</div>
+            <div class="term-en">Growth Plateau</div>
+          </div>
+        </div>
+        <div class="term-def">
+          El mes desde la apertura en que una sede <strong>deja de crecer aceleradamente</strong> y entra en una fase estable, donde las inscripciones mensuales oscilan alrededor de un promedio sin tendencia clara de crecimiento. Es el equivalente operativo al "punto de equilibrio" de la captación.
+        </div>
+        <div class="formula">
+          <div class="label">Criterio de detección en este sistema</div>
+          Plateau = primer mes M donde:<br>
+          1. El promedio móvil 3m ≥ 60% del promedio histórico global de la sede<br>
+             (evita marcar como estable cuando el volumen todavía es bajo)<br>
+          2. En los 3 meses siguientes, el crecimiento no supera el 15% mes a mes
+        </div>
+        <div class="example">Sede Aragón: abrió en Feb 2022. Meses 1-4: crecimiento fuerte (50→150→220→280 inscritos). Mes 5: 290 → mes 6: 285 → mes 7: 295. La variación es &lt;15% y el promedio móvil es ≥60% del global. <strong>Plateau = mes 5</strong>.</div>
+        <div class="note">Una sede que tarda más en llegar al plateau no necesariamente es peor. Insurgentes Norte tardó ~41 meses pero hoy tiene la mayor retención de la red (27%). El crecimiento lento y orgánico puede producir una base más fiel.</div>
+      </div>
+
+      <!-- MEDIANA Y MODA -->
+      <div class="term" id="mediana">
+        <div class="term-header">
+          <span class="term-tag tag-calc">Estadística</span>
+          <div>
+            <div class="term-name">Promedio · Mediana · Moda</div>
+            <div class="term-en">Mean · Median · Mode</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Tres formas de describir el "valor típico" de un conjunto de datos. En el análisis de estadía son especialmente importantes porque los datos tienen valores extremos (usuarios con 5+ años) que sesgan el promedio.
+        </div>
+        <div class="formula">
+          <div class="label">Definiciones</div>
+          <strong>Promedio</strong> = Suma de todos los valores ÷ número de registros<br>
+          → Puede inflarse por valores extremos. Útil como referencia general.<br><br>
+          <strong>Mediana</strong> = Valor central cuando los datos se ordenan de menor a mayor<br>
+          → El 50% de usuarios tiene estadía menor a este valor. Representa al usuario TÍPICO.<br><br>
+          <strong>Moda</strong> = Rango de valores que más se repite (en este sistema, cubo de 30 días)<br>
+          → La estadía MÁS FRECUENTE. Indica cuándo "suele" darse de baja la mayoría.
+        </div>
+        <div class="example">Estadías (en meses) de 7 usuarios: 2, 3, 4, 6, 8, 12, 48<br>
+          Promedio = (2+3+4+6+8+12+48)/7 = <strong>11.9 meses</strong> ← inflado por el de 48<br>
+          Mediana  = 6 (el valor central) → <strong>6 meses</strong> ← el usuario típico real<br>
+          Moda     = 2-3 meses ← donde se concentra la mayoría</div>
+        <div class="note">Para decisiones operativas (cuándo lanzar una campaña de retención), usa la <strong>mediana y la moda</strong>. El promedio sirve para comparar entre sedes o calcular LTV total.</div>
+      </div>
+
+      <!-- ESTACIONALIDAD -->
+      <div class="term" id="estacionalidad">
+        <div class="term-header">
+          <span class="term-tag tag-estrategia">Estratégico</span>
+          <div>
+            <div class="term-name">Estacionalidad</div>
+            <div class="term-en">Seasonality</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Patrón repetitivo de inscripciones y bajas que ocurre en los <strong>mismos meses cada año</strong>, independientemente del año. La estacionalidad permite anticipar picos y valles y planear campañas con 4-8 semanas de anticipación.
+        </div>
+        <div class="formula">
+          <div class="label">Cómo se calcula</div>
+          Para cada mes (Ene-Dic): sumar todas las inscripciones de ese mes en todos los años<br>
+          y dividir entre el número de años disponibles → promedio mensual histórico
+        </div>
+        <table class="vtable">
+          <thead><tr><th>Hallazgo clave</th><th>Mes</th><th>Implicación</th></tr></thead>
+          <tbody>
+            <tr><td>Pico de inscripciones</td><td>Mayo</td><td>Lanzar campañas en Abril</td></tr>
+            <tr><td>Mínimo de inscripciones</td><td>Diciembre</td><td>Preparar campaña "año nuevo" desde Nov</td></tr>
+            <tr><td>Mes con más bajas</td><td>Junio</td><td>Campaña de retención en Mayo</td></tr>
+            <tr><td>Mes con menos bajas</td><td>Febrero</td><td>Mes más estable del año</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ════ SECCIÓN: FINANCIERO ════ -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">💰</span>
+        <div>
+          <div class="section-title">Métricas Financieras</div>
+          <div class="section-sub">Indicadores de rentabilidad e ingreso</div>
+        </div>
+      </div>
+
+      <!-- REVENUE -->
+      <div class="term" id="revenue">
+        <div class="term-header">
+          <span class="term-tag tag-financiero">Financiero</span>
+          <div>
+            <div class="term-name">Revenue · Ingresos</div>
+            <div class="term-en">Revenue</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Monto total de dinero generado por la venta de membresías (inscripciones + mensualidades + reinscripciones) en un período. El revenue <strong>no es ganancia</strong> — es el ingreso bruto antes de descontar costos operativos, nómina, mantenimiento, etc.
+        </div>
+        <div class="formula">
+          <div class="label">Composición del revenue en este sistema</div>
+          Revenue total = Ingresos por inscripciones<br>
+                        + Ingresos por mensualidades<br>
+                        + Ingresos por reinscripciones<br><br>
+          Red completa histórico: $650,698,975 MXN (2015–2026, 11 sedes)
+        </div>
+        <div class="note">El revenue histórico se ve afectado por la inflación: los precios de 2015 eran significativamente menores a los de 2026. Por eso el ticket promedio histórico ($226/mes) es mucho menor al precio actual de lista.</div>
+      </div>
+
+      <!-- TICKET PROMEDIO -->
+      <div class="term" id="ticket">
+        <div class="term-header">
+          <span class="term-tag tag-financiero">Financiero</span>
+          <div>
+            <div class="term-name">Ticket promedio</div>
+            <div class="term-en">Average Revenue Per Unit (ARPU)</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Precio promedio que paga cada usuario por servicio. Varía según el tipo de membresía (1 clase/sem, 2 clases/sem, 5 clases/sem), la sede, el año y si tiene descuento o beca.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula</div>
+          Ticket mensual = Ingresos por mensualidades ÷ Número de mensualidades vendidas<br><br>
+          Ticket histórico ponderado red: $226 MXN/mensualidad<br>
+          (bajo porque incluye años anteriores con precios menores)<br><br>
+          Ticket estimado 2026: ~$500 MXN/mensualidad (red promedio)
+        </div>
+        <table class="vtable">
+          <thead><tr><th>Sede</th><th>Ticket hist.</th><th>Ticket 2026 est.</th><th>Incremento</th></tr></thead>
+          <tbody>
+            <tr><td>Pedregal</td><td>$366/m</td><td>$1,063/m</td><td style="color:#16a34a;font-weight:700">+190%</td></tr>
+            <tr><td>Coacalco</td><td>$602/m</td><td>$845/m</td><td style="color:#16a34a;font-weight:700">+40%</td></tr>
+            <tr><td>Aragón</td><td>$316/m</td><td>$715/m</td><td style="color:#16a34a;font-weight:700">+126%</td></tr>
+            <tr><td>Santa Cecilia</td><td>$118/m</td><td>$250/m</td><td style="color:#16a34a;font-weight:700">+112%</td></tr>
+            <tr><td>Coapa</td><td>$264/m</td><td>$279/m</td><td>+6%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ROI -->
+      <div class="term" id="roi">
+        <div class="term-header">
+          <span class="term-tag tag-financiero">Financiero</span>
+          <div>
+            <div class="term-name">ROI · Retorno sobre la Inversión</div>
+            <div class="term-en">Return on Investment (ROI)</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Mide cuánto dinero se recupera por cada peso invertido en una campaña. Un ROI positivo significa que la campaña generó más de lo que costó. Un ROI del 200% significa que por cada $1 invertido se recuperaron $3 ($1 original + $2 de ganancia).
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula</div>
+          ROI (%) = ((Ingreso generado − Costo de campaña) ÷ Costo de campaña) × 100<br><br>
+          En el simulador:<br>
+          Ingreso generado = Usuarios adicionales × Ticket × Meses adicionales estimados<br>
+          ROI = ((Ingreso generado − Costo campaña) ÷ Costo campaña) × 100
+        </div>
+        <div class="example">Campaña de retención: costo $50,000. Se retienen 200 usuarios adicionales que duran 3 meses más a $500/mes cada uno.<br>
+          Ingreso generado = 200 × $500 × 3 = $300,000<br>
+          ROI = ($300,000 − $50,000) / $50,000 × 100 = <strong>+500%</strong></div>
+      </div>
+
+      <!-- PAYBACK -->
+      <div class="term" id="payback">
+        <div class="term-header">
+          <span class="term-tag tag-financiero">Financiero</span>
+          <div>
+            <div class="term-name">Payback · Período de recuperación</div>
+            <div class="term-en">Payback Period</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Tiempo que tarda una inversión en recuperarse a través del ingreso que genera. Un payback de 2 meses significa que en 2 meses el ingreso adicional ya cubre el costo de la campaña.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula</div>
+          Payback (meses) = Costo de campaña ÷ Ingreso adicional mensual
+        </div>
+        <div class="example">Campaña $50,000. Se retienen 200 usuarios extra a $500/mes = $100,000/mes adicional.<br>
+          Payback = $50,000 ÷ $100,000 = <strong>0.5 meses</strong> (¡se recupera en 2 semanas!)</div>
+      </div>
+    </div>
+
+    <!-- ════ SECCIÓN: CAPTACIÓN ════ -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">📣</span>
+        <div>
+          <div class="section-title">Captación</div>
+          <div class="section-sub">Cómo llegan los usuarios y qué tan bien los retiene cada canal</div>
+        </div>
+      </div>
+
+      <!-- CANAL -->
+      <div class="term" id="canal">
+        <div class="term-header">
+          <span class="term-tag tag-operativo">Operativo</span>
+          <div>
+            <div class="term-name">Canal de captación · Medio</div>
+            <div class="term-en">Acquisition Channel</div>
+          </div>
+        </div>
+        <div class="term-def">
+          La forma en que un usuario conoció la academia y decidió inscribirse. En los datos, este campo se registra al momento de la inscripción. Los canales se agrupan en 4 categorías:
+        </div>
+        <table class="vtable">
+          <thead><tr><th>Tipo</th><th>Ejemplos</th><th>Característica</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Digital</strong></td><td>Google, Facebook, Instagram, TikTok</td><td>Alta escalabilidad, variable en retención</td></tr>
+            <tr><td><strong>Referidos</strong></td><td>"Referido por un usuario", "Referido por empleado"</td><td>Buena retención, difícil de escalar</td></tr>
+            <tr><td><strong>Presencial/OOH</strong></td><td>"Conozco el deportivo", Volante, Lonas</td><td>El canal más común, retención media</td></tr>
+            <tr><td><strong>Convenios</strong></td><td>Totalpass, Gympass, Talleres Inter</td><td>Volumen variable, alta calidad de usuario</td></tr>
+          </tbody>
+        </table>
+        <div class="note">TikTok tiene la mayor retención de todos los canales digitales (76.7%) pero un volumen muy bajo. Escalar ese canal podría mejorar significativamente la calidad promedio de captación.</div>
+      </div>
+
+      <!-- PROMO -->
+      <div class="term" id="promo">
+        <div class="term-header">
+          <span class="term-tag tag-operativo">Operativo</span>
+          <div>
+            <div class="term-name">Promoción</div>
+            <div class="term-en">Promotion / Discount</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Descuento o beneficio especial con el que se inscribió un usuario. Las promociones pueden ser descuentos en mensualidad, inscripción gratuita, meses de regalo, etc. Su impacto en la retención varía enormemente: algunas promos atraen usuarios fieles, otras solo atraen "oportunistas del descuento" que se van al terminar la oferta.
+        </div>
+        <div class="formula">
+          <div class="label">Métrica de calidad de promo</div>
+          Retención promo (%) = Activos con esa promo ÷ Total inscritos con esa promo × 100<br><br>
+          LTV promo = Estadía mediana usuarios con esa promo × Ticket mensual + Inscripción
+        </div>
+        <div class="note">Una promo con baja retención (ej. 5%) atrae usuarios que se van rápido y puede resultar más costosa que rentable. Una promo con 30%+ de retención genera usuarios de alto valor.</div>
+      </div>
+    </div>
+
+    <!-- ════ SECCIÓN: OPERATIVO ════ -->
+    <div class="section">
+      <div class="section-header">
+        <span class="section-icon">🏢</span>
+        <div>
+          <div class="section-title">Conceptos Operativos</div>
+          <div class="section-sub">Definiciones de los elementos estructurales del sistema</div>
+        </div>
+      </div>
+
+      <!-- SEDE -->
+      <div class="term" id="sede">
+        <div class="term-header">
+          <span class="term-tag tag-operativo">Operativo</span>
+          <div>
+            <div class="term-name">Sede · Unidad deportiva</div>
+            <div class="term-en">Branch / Location</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Cada una de las 11 instalaciones físicas donde operan las academias de natación. Cada sede tiene su propia base de usuarios, precios, canales de captación dominantes y métricas de retención. El análisis por sede es fundamental porque el comportamiento varía significativamente entre ellas.
+        </div>
+        <table class="vtable">
+          <thead><tr><th>Sede</th><th>Apertura</th><th>Inscritos</th><th>Retención</th></tr></thead>
+          <tbody>
+            <tr><td>Coapa</td><td>Feb 2015</td><td>25,904</td><td>5.7%</td></tr>
+            <tr><td>El Rosario</td><td>Ene 2017</td><td>12,023</td><td>9.1%</td></tr>
+            <tr><td>Santa Cecilia</td><td>Ene 2017</td><td>14,574</td><td>12.0%</td></tr>
+            <tr><td>Mundo E</td><td>Ago 2017</td><td>10,836</td><td>9.1%</td></tr>
+            <tr><td>Insurgentes Norte</td><td>Ene 2018</td><td>6,766</td><td>27.0%</td></tr>
+            <tr><td>Exhibimex</td><td>Jul 2018</td><td>13,042</td><td>11.7%</td></tr>
+            <tr><td>Pedregal</td><td>Feb 2022</td><td>6,995</td><td>32.3%</td></tr>
+            <tr><td>Querétaro</td><td>Feb 2022</td><td>3,066</td><td>19.3%</td></tr>
+            <tr><td>Aragón</td><td>Feb 2022</td><td>6,957</td><td>19.7%</td></tr>
+            <tr><td>Coacalco</td><td>Abr 2024</td><td>1,959</td><td>40.8%</td></tr>
+            <tr><td>Los Reyes</td><td>Dic 2024</td><td>2,375</td><td>50.5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- COHORTE MES -->
+      <div class="term" id="cohorte-mes">
+        <div class="term-header">
+          <span class="term-tag tag-calc">Calculado</span>
+          <div>
+            <div class="term-name">Activos históricos por mes</div>
+            <div class="term-en">Monthly Active Members (MAM)</div>
+          </div>
+        </div>
+        <div class="term-def">
+          Número de usuarios que tenían membresía <strong>vigente</strong> en cada mes específico. No es el número de inscripciones de ese mes — es la cuenta de quiénes estaban activos en ese corte temporal. Se calcula como: todos los que se inscribieron antes o durante ese mes y cuya fecha de baja es posterior a ese mes.
+        </div>
+        <div class="formula">
+          <div class="label">Fórmula para cada mes M</div>
+          Activos en mes M = COUNT(usuarios donde:<br>
+          &nbsp;&nbsp;fecha_inscripción ≤ último día del mes M<br>
+          &nbsp;&nbsp;AND fecha_baja &gt; último día del mes M)
+        </div>
+        <div class="example">Para calcular activos en Marzo 2024: contar usuarios inscritos antes del 31/Mar/2024 cuya fecha de baja sea posterior al 31/Mar/2024 (o que sean activos actualmente). Resultado en este sistema: el pico histórico fue <strong>16,564 activos en Septiembre 2025</strong>.</div>
+      </div>
+
+      <!-- EQUILIBRIO -->
+      <div class="term" id="equilibrio">
+        <div class="term-header">
+          <span class="term-tag tag-estrategia">Estratégico</span>
+          <div>
+            <div class="term-name">Punto de equilibrio operativo</div>
+            <div class="term-en">Operational Break-Even</div>
+          </div>
+        </div>
+        <div class="term-def">
+          En el contexto de este sistema, el punto de equilibrio de una sede es el mes desde su apertura en que <strong>las altas y bajas se equilibran</strong> y la base de activos deja de crecer de forma acelerada, estabilizándose en un volumen sostenible. Es diferente al break-even financiero (que requiere conocer los costos fijos de cada sede).
+        </div>
+        <div class="formula">
+          <div class="label">Señal de equilibrio en este sistema</div>
+          Mes donde el promedio móvil de inscripciones (3 meses) es:<br>
+          • ≥ 60% del promedio histórico global de la sede (volumen maduro)<br>
+          • Y no crece más del 15% en los 3 meses siguientes (estabilizado)<br><br>
+          Promedio de la red: las sedes alcanzan plateau en <strong>meses 4–9</strong> para inscripciones<br>
+          y en <strong>meses 7–14</strong> para la base de activos.
+        </div>
+        <table class="vtable">
+          <thead><tr><th>Sede</th><th>Plateau inscr.</th><th>Plateau activos</th><th>Interpretación</th></tr></thead>
+          <tbody>
+            <tr><td>Coapa</td><td>Mes 7</td><td>Mes 8</td><td>Madurez rápida</td></tr>
+            <tr><td>Insurgentes Norte</td><td>Mes 41</td><td>Mes 64</td><td>Crecimiento lento y orgánico</td></tr>
+            <tr><td>Pedregal</td><td>Mes 18</td><td>Mes 31</td><td>Crecimiento gradual sostenido</td></tr>
+            <tr><td>Los Reyes</td><td>Mes 3</td><td>Mes 8</td><td>Arranque explosivo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Nota final -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:18px 20px;margin-top:8px;font-size:12px;color:#64748b;line-height:1.65">
+      <strong style="color:#0f172a">📌 Sobre los datos de este sistema:</strong><br>
+      Fecha de corte: <strong>23 de junio de 2026</strong> · Base: 104,497 inscritos históricos · 11 sedes activas ·
+      Revenue histórico total red: <strong>$650,698,975 MXN</strong> · Ticket mensual histórico ponderado: <strong>$226 MXN</strong> ·
+      Ticket estimado actual 2026: <strong>$500 MXN</strong> (promedio red, varía por sede).
+      Los cálculos se realizan sobre la base de usuarios completa sin muestreo.
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Search functionality
+function filterTerms(q){
+  q = q.toLowerCase().trim();
+  const terms = document.querySelectorAll('.term');
+  let visible = 0;
+  terms.forEach(t => {
+    const text = t.textContent.toLowerCase();
+    const show = !q || text.includes(q);
+    t.classList.toggle('hidden', !show);
+    if(show) visible++;
+  });
+  // Show/hide sections based on visible terms
+  document.querySelectorAll('.section').forEach(s => {
+    const anyVisible = [...s.querySelectorAll('.term')].some(t => !t.classList.contains('hidden'));
+    s.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').classList.toggle('hidden', visible > 0);
+}
+
+// Highlight active TOC link on scroll
+const links = document.querySelectorAll('.toc-link');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      links.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc-link[href="#${e.target.id}"]`);
+      if(active) active.classList.add('active');
+    }
+  });
+}, {rootMargin:'-20% 0px -70% 0px'});
+document.querySelectorAll('.term[id]').forEach(t => observer.observe(t));
+</script>
+
+</body>
+</html>
