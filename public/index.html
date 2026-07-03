@@ -270,8 +270,8 @@ body{background:#f1f5f9;font-family:'Inter',system-ui,sans-serif;min-height:100v
         Nuevo archivo
       </button>
       <input type="file" id="file-input" accept=".xlsx,.xls,.csv" style="display:none" onchange="handleFile(this)">
-      <a href="reportes.html" target="_blank" style="padding:7px 14px;border-radius:8px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:12px;font-weight:600;color:#475569;text-decoration:none">📈 Reportes</a>
-      <a href="glosario.html" target="_blank" style="padding:7px 14px;border-radius:8px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:12px;font-weight:600;color:#475569;text-decoration:none">📘 Glosario</a>
+      <a href="reportes.html" target="_blank" style="padding:7px 14px;border-radius:8px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:12px;font-weight:600;color:#475569;text-decoration:none;white-space:nowrap">📈 Reportes</a>
+      <a href="glosario.html" target="_blank" style="padding:7px 14px;border-radius:8px;background:#f1f5f9;border:1px solid #e2e8f0;font-size:12px;font-weight:600;color:#475569;text-decoration:none;white-space:nowrap">📘 Glosario</a>
     </div>
   </div>
 </header>
@@ -1057,7 +1057,7 @@ body{background:#f1f5f9;font-family:'Inter',system-ui,sans-serif;min-height:100v
 
 <script>
 /* ══ EMBEDDED DATA ══ */
-const B64 = ''; // Data loaded from Firebase
+const B64 = ''; // Data from Firebase
 /* ══ STATE ══ */
 let RAW=[], FILT=[];
 let CHARTS={};
@@ -1070,64 +1070,22 @@ let openCS=null;
 
 /* ══ DECOMPRESS & LOAD PRELOADED DATA ══ */
 async function loadPreloaded(){
+  // Delegated to Firebase module loader (see script type=module below)
   setMsg('Conectando con Firebase…'); setProg(10);
-  try {
-    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getFirestore, doc, getDoc, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyC5Q3FQl6O048p7w8rk7Rd7wBbY6fS9jms",
-      authDomain: "aquaanalytics-8b4dd.firebaseapp.com",
-      projectId: "aquaanalytics-8b4dd",
-      storageBucket: "aquaanalytics-8b4dd.firebasestorage.app",
-      messagingSenderId: "596258795795",
-      appId: "1:596258795795:web:3f3dd2d534248ec368eae6"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    
-    const SEDES = ['Coapa','El Rosario','Santa Cecilia','Mundo E','Insurgentes Norte','Exhibimex','Pedregal','Querétaro','Aragón','Coacalco','Los Reyes'];
-    
-    setProg(20); setMsg('Cargando datos de Firebase…');
-    
-    // Load all sedes in PARALLEL for speed
-    const allRecords = [];
-    
-    function safeName(s){ return s.replace(/\s/g,'_').replace(/é/g,'e').replace(/á/g,'a').replace(/í/g,'i').replace(/ñ/g,'n').replace(/ó/g,'o').replace(/ú/g,'u'); }
-    function mapRecord(r){ return { estatus:r.e||'', id:String(r.i||''), sede:r.s||'Sin sede', medio:r.m||'', promo:r.p||'', sexo:r.x||'', edad:r.a, cp:'', inscDate:r.d?new Date(r.d):null, bajaDate:r.b?new Date(r.b):null, estadia:r.t }; }
-    
-    // Load all chunks for one sede
-    async function loadSede(sede){
-      const safe = safeName(sede);
-      const recs = [];
-      for(let ci=0; ci<60; ci++){
-        try {
-          const snap = await getDoc(doc(db, 'sedes', safe+'_'+ci));
-          if(!snap.exists()) break;
-          (snap.data().records||[]).forEach(r => recs.push(mapRecord(r)));
-        } catch(e){ break; }
-      }
-      return recs;
-    }
-    
-    setMsg('Cargando todas las sedes en paralelo…');
-    const results = await Promise.all(SEDES.map(s => loadSede(s)));
-    results.forEach(recs => allRecords.push(...recs));
-    
-    RAW = allRecords;
-    setProg(88);
-    setMsg('Construyendo dashboard…');
-    await new Promise(r=>setTimeout(r,50));
+}
+
+function initDashFromRecords(records){
+  RAW = records;
+  setProg(90);
+  setMsg('Construyendo dashboard…');
+  setTimeout(()=>{
     initDropdowns();
     applyFilters();
     initLaunchAnalysis();
     initActivosHist();
     showDash();
     setProg(100);
-  } catch(e){
-    console.error(e);
-    setMsg('Error al cargar datos: '+e.message);
-  }
+  }, 50);
 }
 
 /* ══ FILE UPLOAD (optional reload) ══ */
@@ -2074,7 +2032,75 @@ function renderLaunchDetail(sede){
 Chart.defaults.font.family="'Inter',system-ui,sans-serif";
 Chart.defaults.color='#94a3b8';
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllCS();closeLongevos();}});
-window.addEventListener('load',()=>loadPreloaded().catch(e=>{console.error(e);setMsg('Error: '+e.message);}));
+window.addEventListener('load',()=>loadPreloaded());
+window.setMsg=setMsg;
+window.initDashFromRecords=initDashFromRecords;
+</script>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC5Q3FQl6O048p7w8rk7Rd7wBbY6fS9jms",
+  authDomain: "aquaanalytics-8b4dd.firebaseapp.com",
+  projectId: "aquaanalytics-8b4dd",
+  storageBucket: "aquaanalytics-8b4dd.firebasestorage.app",
+  messagingSenderId: "596258795795",
+  appId: "1:596258795795:web:3f3dd2d534248ec368eae6"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const SEDES = ['Coapa','El Rosario','Santa Cecilia','Mundo E','Insurgentes Norte','Exhibimex','Pedregal','Querétaro','Aragón','Coacalco','Los Reyes'];
+
+function safeName(s){ return s.replace(/\s/g,'_').replace(/é/g,'e').replace(/á/g,'a').replace(/í/g,'i').replace(/ñ/g,'n').replace(/ó/g,'o').replace(/ú/g,'u'); }
+
+function mapRecord(r){
+  return {
+    estatus:  r.e||'',
+    id:       String(r.i||''),
+    sede:     r.s||'Sin sede',
+    medio:    r.m||'',
+    promo:    r.p||'',
+    sexo:     r.x||'',
+    edad:     r.a,
+    cp:       '',
+    inscDate: r.d ? new Date(r.d) : null,
+    bajaDate: r.b ? new Date(r.b) : null,
+    estadia:  r.t,
+  };
+}
+
+async function loadSede(sede){
+  const safe = safeName(sede);
+  const recs = [];
+  for(let ci=0; ci<60; ci++){
+    try {
+      const snap = await getDoc(doc(db, 'sedes', safe+'_'+ci));
+      if(!snap.exists()) break;
+      (snap.data().records||[]).forEach(r => recs.push(mapRecord(r)));
+    } catch(e){ break; }
+  }
+  return recs;
+}
+
+async function loadAll(){
+  try {
+    window.setMsg && window.setMsg('Cargando datos de Firebase…');
+    const results = await Promise.all(SEDES.map(s => loadSede(s)));
+    const all = results.flat();
+    window.setMsg && window.setMsg('Datos cargados: ' + all.length + ' registros');
+    window.initDashFromRecords && window.initDashFromRecords(all);
+  } catch(e){
+    console.error('Firebase error:', e);
+    window.setMsg && window.setMsg('Error Firebase: ' + e.message);
+  }
+}
+
+// Wait for main script to initialize, then load
+window.addEventListener('load', () => setTimeout(loadAll, 500));
 </script>
 </body>
 </html>
