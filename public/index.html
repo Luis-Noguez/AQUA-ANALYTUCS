@@ -1090,39 +1090,29 @@ async async function loadPreloaded(){
     
     setProg(20); setMsg('Cargando datos de Firebase…');
     
-    // Load all sede docs (chunked)
+    // Load all sedes in PARALLEL for speed
     const allRecords = [];
-    for(let si=0; si<SEDES.length; si++){
-      const sede = SEDES[si];
-      const safeSede = sede.replace(/\s/g,'_').replace(/é/g,'e').replace(/á/g,'a').replace(/í/g,'i').replace(/ñ/g,'n').replace(/ó/g,'o').replace(/ú/g,'u');
-      setMsg('Cargando ' + sede + '…');
-      setProg(20 + Math.round(si/SEDES.length*60));
-      
-      // Try chunks 0..N
+    
+    function safeName(s){ return s.replace(/\s/g,'_').replace(/é/g,'e').replace(/á/g,'a').replace(/í/g,'i').replace(/ñ/g,'n').replace(/ó/g,'o').replace(/ú/g,'u'); }
+    function mapRecord(r){ return { estatus:r.e||'', id:String(r.i||''), sede:r.s||'Sin sede', medio:r.m||'', promo:r.p||'', sexo:r.x||'', edad:r.a, cp:'', inscDate:r.d?new Date(r.d):null, bajaDate:r.b?new Date(r.b):null, estadia:r.t }; }
+    
+    // Load all chunks for one sede
+    async function loadSede(sede){
+      const safe = safeName(sede);
+      const recs = [];
       for(let ci=0; ci<60; ci++){
-        const docId = ci===0 ? safeSede + '_0' : safeSede + '_' + ci;
         try {
-          const snap = await getDoc(doc(db, 'sedes', docId));
+          const snap = await getDoc(doc(db, 'sedes', safe+'_'+ci));
           if(!snap.exists()) break;
-          const records = snap.data().records || [];
-          records.forEach(r => {
-            allRecords.push({
-              estatus:  r.e||'',
-              id:       String(r.i||''),
-              sede:     r.s||'Sin sede',
-              medio:    r.m||'',
-              promo:    r.p||'',
-              sexo:     r.x||'',
-              edad:     r.a,
-              cp:       '',
-              inscDate: r.d ? new Date(r.d) : null,
-              bajaDate: r.b ? new Date(r.b) : null,
-              estadia:  r.t,
-            });
-          });
-        } catch(e) { break; }
+          (snap.data().records||[]).forEach(r => recs.push(mapRecord(r)));
+        } catch(e){ break; }
       }
+      return recs;
     }
+    
+    setMsg('Cargando todas las sedes en paralelo…');
+    const results = await Promise.all(SEDES.map(s => loadSede(s)));
+    results.forEach(recs => allRecords.push(...recs));
     
     RAW = allRecords;
     setProg(88);
