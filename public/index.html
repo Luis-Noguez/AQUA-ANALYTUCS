@@ -693,361 +693,10 @@ body{background:#f1f5f9;font-family:'Inter',system-ui,sans-serif;min-height:100v
     </div><!-- /tab-arranque -->
     <!-- ═══ TAB INSIGHTS ═══ -->
     <div id="tab-insights" class="panel">
-
-      <!-- SUMMARY SCOREBOARD -->
-      <div class="insight-section">
-        <div class="insight-section-title">📊 Resumen ejecutivo</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
-
-          <div class="insight-card" style="border-left:4px solid #0891b2">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#e0f2fe">🏊</div>
-              <div><div class="ic-title">Base total de usuarios</div><div class="ic-sub">11 sedes · corte 23 jun 2026</div></div>
-            </div>
-            <div class="ic-body">
-              <strong>104,497</strong> inscritos históricos. Solo <strong>14,890 activos</strong> (14.2%).
-              <div class="highlight warn">El 85.8% de quienes alguna vez se inscribieron ya no están activos — oportunidad de reactivación masiva.</div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-left:4px solid #10b981">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#dcfce7">📈</div>
-              <div><div class="ic-title">Crecimiento 2024 → 2025</div><div class="ic-sub">Inscripciones nuevas</div></div>
-            </div>
-            <div class="ic-body">
-              2024: <strong>11,741</strong> inscritos · 2025: <strong>13,627</strong> (<span class="trend-up">+16%</span>).
-              El año 2025 fue el mejor año de captación histórico.
-              <div class="highlight success">Tendencia positiva sostenida desde 2021. El momentum es real.</div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-left:4px solid #e11d48">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fee2e2">⚠️</div>
-              <div><div class="ic-title">Abandono temprano</div><div class="ic-sub">Inactivos con &lt;3 meses</div></div>
-            </div>
-            <div class="ic-body">
-              <strong>18,193 personas</strong> (17.4% del total) se dieron de baja antes de los 3 meses.
-              <div class="highlight danger">Casi 1 de cada 5 usuarios no supera el primer trimestre. El momento crítico de retención está en los primeros 90 días.</div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-left:4px solid #7c3aed">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#ede9fe">👥</div>
-              <div><div class="ic-title">Perfil del usuario típico</div><div class="ic-sub">Mediana y moda del dataset</div></div>
-            </div>
-            <div class="ic-body">
-              Mujer (58%), entre <strong>18-34 años</strong>, que llegó por <strong>"Conozco el deportivo"</strong>, con una estadía mediana de <strong>7 meses</strong>.
-              <div class="highlight">La base tiene 4 grupos de edad muy equilibrados — cada uno requiere estrategia diferenciada.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- RETENCIÓN Y CHURN -->
-      <div class="insight-section">
-        <div class="insight-section-title">🔄 Retención y Churn por Sede</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#dcfce7">🏆</div>
-              <div><div class="ic-title">Sedes con mayor retención</div><div class="ic-sub">% de activos sobre total inscrito</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="stat-row"><span class="label">🥇 Los Reyes</span><span class="value">50.5% activos <span class="badge-pct" style="background:#dcfce7;color:#16a34a">+50%</span></span></div>
-              <div class="stat-row"><span class="label">🥈 Coacalco</span><span class="value">40.8% activos <span class="badge-pct" style="background:#dcfce7;color:#16a34a">+41%</span></span></div>
-              <div class="stat-row"><span class="label">🥉 Pedregal</span><span class="value">32.3% activos <span class="badge-pct" style="background:#dbeafe;color:#1d4ed8">+32%</span></span></div>
-              <div class="stat-row"><span class="label">4. Insurgentes Norte</span><span class="value">27.0% activos</span></div>
-              <div class="highlight success" style="margin-top:10px">Los Reyes y Coacalco retienen el doble que el promedio de red. Investigar qué hacen diferente.</div>
-              <div style="margin-top:8px"><span class="action-tag green">✓ Benchmark interno</span><span class="action-tag blue">✓ Replicar modelo</span></div>
-            </div>
-          </div>
-
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fee2e2">🚨</div>
-              <div><div class="ic-title">Sedes con mayor churn</div><div class="ic-sub">% de inactivos sobre total</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="stat-row"><span class="label">⚠️ Coapa</span><span class="value">94.3% inactivos <span class="badge-pct" style="background:#fee2e2;color:#dc2626">crítico</span></span></div>
-              <div class="stat-row"><span class="label">⚠️ El Rosario</span><span class="value">90.9% inactivos <span class="badge-pct" style="background:#fee2e2;color:#dc2626">alto</span></span></div>
-              <div class="stat-row"><span class="label">⚠️ Mundo E</span><span class="value">90.9% inactivos</span></div>
-              <div class="stat-row"><span class="label">⚠️ Exhibimex</span><span class="value">88.3% inactivos</span></div>
-              <div class="highlight danger" style="margin-top:10px">Coapa con 25,904 inscritos y solo 5.7% activos es la sede con mayor problema estructural de retención.</div>
-              <div style="margin-top:8px"><span class="action-tag red">⚑ Revisión urgente</span><span class="action-tag amber">✓ Plan de recuperación</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CAPTACIÓN -->
-      <div class="insight-section">
-        <div class="insight-section-title">📣 Análisis de Captación y Calidad de Canal</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fef3c7">📢</div>
-              <div><div class="ic-title">Canales por volumen vs retención</div><div class="ic-sub">No todos los canales son iguales</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="stat-row"><span class="label">Conozco el deportivo</span><span class="value" style="color:#0f172a">37,410 · 14.4% ret.</span></div>
-              <div class="stat-row"><span class="label">Google</span><span class="value">23,191 · 13.1% ret.</span></div>
-              <div class="stat-row"><span class="label">Referidos</span><span class="value">19,196 · 14.4% ret.</span></div>
-              <div class="stat-row"><span class="label">Facebook</span><span class="value">11,747 · 14.1% ret.</span></div>
-              <div class="stat-row"><span class="label" style="color:#10b981;font-weight:600">TikTok ⭐</span><span class="value" style="color:#10b981">146 · <strong>76.7% ret.</strong></span></div>
-              <div class="stat-row"><span class="label" style="color:#0891b2;font-weight:600">Banner Web ⭐</span><span class="value" style="color:#0891b2">717 · <strong>55.0% ret.</strong></span></div>
-              <div class="highlight success">TikTok tiene la retención más alta (76.7%) pero volumen muy bajo. Escalar este canal podría transformar la calidad de captación.</div>
-            </div>
-          </div>
-
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#e0f2fe">💡</div>
-              <div><div class="ic-title">Paradoja de los canales masivos</div><div class="ic-sub">Volumen ≠ calidad</div></div>
-            </div>
-            <div class="ic-body">
-              Los 3 canales principales (Conozco el deportivo, Google, Referidos) aportan el <strong>76% del volumen</strong> pero tienen retención igual o inferior al promedio (13-14%).
-              <div class="highlight warn">La inversión en Google y Facebook capta muchos usuarios de corta estadía. Considera optimizar hacia audiencias más calificadas o con intent más alto.</div>
-              <div style="margin-top:10px">
-                <strong>Propuestas de acción:</strong><br>
-                <span class="action-tag blue">✓ Escalar TikTok</span>
-                <span class="action-tag green">✓ A/B test creativos</span>
-                <span class="action-tag amber">✓ Audiencias look-alike de activos</span>
-                <span class="action-tag purple">✓ Programa de referidos premium</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ESTACIONALIDAD -->
-      <div class="insight-section">
-        <div class="insight-section-title">📅 Estacionalidad e Inscripciones</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fef3c7">☀️</div>
-              <div><div class="ic-title">Picos y valles estacionales</div><div class="ic-sub">Inscripciones por mes (histórico)</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="sparkbar" id="sparkbar-meses" style="margin-bottom:8px">
-                <div class="bar" style="height:88%;background:#0891b2" title="Ene: 9,780"></div>
-                <div class="bar" style="height:86%;background:#0891b2" title="Feb: 9,537"></div>
-                <div class="bar" style="height:83%;background:#0891b2" title="Mar: 9,249"></div>
-                <div class="bar" style="height:89%;background:#0891b2" title="Abr: 9,944"></div>
-                <div class="bar" style="height:100%;background:#d97706" title="May: 11,155 — PICO"></div>
-                <div class="bar" style="height:81%;background:#0891b2" title="Jun: 9,057"></div>
-                <div class="bar" style="height:98%;background:#0891b2" title="Jul: 10,920"></div>
-                <div class="bar" style="height:85%;background:#0891b2" title="Ago: 9,457"></div>
-                <div class="bar" style="height:78%;background:#0891b2" title="Sep: 8,738"></div>
-                <div class="bar" style="height:68%;background:#64748b" title="Oct: 7,625"></div>
-                <div class="bar" style="height:50%;background:#e11d48" title="Nov: 5,606 — bajo"></div>
-                <div class="bar" style="height:31%;background:#e11d48" title="Dic: 3,429 — mínimo"></div>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:10px;color:#94a3b8;margin-bottom:8px"><span>Ene</span><span>May</span><span>Jul</span><span>Dic</span></div>
-              <div class="stat-row"><span class="label">🔺 Mes pico</span><span class="value trend-up">Mayo (+23% vs promedio)</span></div>
-              <div class="stat-row"><span class="label">🔻 Mes mínimo</span><span class="value trend-down">Diciembre (-58% vs Mayo)</span></div>
-              <div class="stat-row"><span class="label">📉 Caída Q4</span><span class="value trend-down">Oct-Dic pierde el 40%</span></div>
-              <div class="highlight warn">Noviembre y Diciembre son los meses más débiles. Preparar campañas de "año nuevo, nuevos hábitos" con anticipación.</div>
-            </div>
-          </div>
-
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fee2e2">📉</div>
-              <div><div class="ic-title">Meses con más bajas</div><div class="ic-sub">Cuándo abandonan los usuarios</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="stat-row"><span class="label">🚨 Junio</span><span class="value trend-down">11,796 bajas — el peor mes</span></div>
-              <div class="stat-row"><span class="label">⚠️ Diciembre</span><span class="value trend-down">9,004 bajas</span></div>
-              <div class="stat-row"><span class="label">⚠️ Agosto</span><span class="value trend-down">8,306 bajas</span></div>
-              <div class="stat-row"><span class="label">⚠️ Septiembre</span><span class="value trend-down">8,289 bajas</span></div>
-              <div class="stat-row"><span class="label">✅ Febrero</span><span class="value trend-up">4,268 bajas — el mejor</span></div>
-              <div class="highlight danger">Junio concentra el mayor volumen de bajas. Lanzar campaña de retención en <strong>Mayo</strong> para frenar el abandono pre-vacacional.</div>
-              <div style="margin-top:8px">
-                <span class="action-tag red">⚑ Campaña Mayo-Junio</span>
-                <span class="action-tag amber">✓ Incentivo verano</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SEGMENTACIÓN DE EDAD -->
-      <div class="insight-section">
-        <div class="insight-section-title">👤 Segmentación Estratégica por Edad y Género</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
-
-          <div class="insight-card" style="border-top:3px solid #7c3aed">
-            <div class="ic-title" style="margin-bottom:6px">🧒 Niños &lt;12 años</div>
-            <div class="ic-body">
-              <strong>23,418</strong> inscritos · <strong>19.0%</strong> retención · Estadía mediana 6 meses
-              <div class="highlight success" style="margin-top:8px">El grupo con <strong>2ª mejor retención</strong>. Los padres son fieles si el servicio los convence. Clave: comunicación con papás, no con el niño.</div>
-              <div style="margin-top:6px"><span class="action-tag purple">✓ Programa familiar</span></div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-top:3px solid #e11d48">
-            <div class="ic-title" style="margin-bottom:6px">🧑‍🎓 Jóvenes 12-17 años</div>
-            <div class="ic-body">
-              <strong>18,993</strong> inscritos · <strong>8.0%</strong> retención · la más baja de todos los grupos
-              <div class="highlight danger" style="margin-top:8px">Solo 1 de cada 12 jóvenes sigue activo. El abandono en adolescentes es estructural — compiten con otras actividades y redes sociales.</div>
-              <div style="margin-top:6px"><span class="action-tag red">⚑ Diseñar oferta diferenciada</span></div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-top:3px solid #0891b2">
-            <div class="ic-title" style="margin-bottom:6px">🧑 Adultos 18-34 años</div>
-            <div class="ic-body">
-              <strong>27,186</strong> inscritos (el grupo más grande) · <strong>10.6%</strong> retención · Estadía mediana 5.8 meses
-              <div class="highlight warn" style="margin-top:8px">Mayor volumen pero retención media. Muy sensibles al precio y la experiencia. Oportunidad con marketing de comunidad y resultados.</div>
-              <div style="margin-top:6px"><span class="action-tag blue">✓ App, retos, comunidad</span></div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-top:3px solid #d97706">
-            <div class="ic-title" style="margin-bottom:6px">👩‍💼 Adultos May. 35-59</div>
-            <div class="ic-body">
-              <strong>26,134</strong> inscritos · <strong>15.1%</strong> retención · Estadía mediana 7 meses
-              <div class="highlight success" style="margin-top:8px">Mejor balance volumen-retención. Motivación de salud y rutina. Son los más consistentes y dispuestos a pagar más por conveniencia.</div>
-              <div style="margin-top:6px"><span class="action-tag green">✓ Programa premium</span></div>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-top:3px solid #10b981">
-            <div class="ic-title" style="margin-bottom:6px">👴 Senior 60+ años</div>
-            <div class="ic-body">
-              <strong>8,766</strong> inscritos · <strong>24.2%</strong> retención — la más alta de todos · Estadía mediana 9.9 meses
-              <div class="highlight success" style="margin-top:8px">El segmento con <strong>mayor fidelidad</strong>. La natación es su ejercicio de preferencia por ser de bajo impacto. Enorme potencial de crecimiento sub-explotado.</div>
-              <div style="margin-top:6px"><span class="action-tag green">✓ Expandir oferta senior</span><span class="action-tag blue">✓ Campaña IMSS/ISSSTE</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CRECIMIENTO SEDES -->
-      <div class="insight-section">
-        <div class="insight-section-title">🚀 Crecimiento por Sede 2024 vs 2025</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#dcfce7">🚀</div>
-              <div><div class="ic-title">Sedes con mayor crecimiento</div><div class="ic-sub">Inscripciones 2024 → 2025</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="stat-row"><span class="label">⭐ Los Reyes</span><span class="value trend-up">231 → 1,514 (+555%)</span></div>
-              <div class="stat-row"><span class="label">⭐ Coacalco</span><span class="value trend-up">410 → 1,156 (+182%)</span></div>
-              <div class="stat-row"><span class="label">📈 Insurgentes Norte</span><span class="value trend-up">1,143 → 1,505 (+32%)</span></div>
-              <div class="stat-row"><span class="label">📈 Mundo E</span><span class="value trend-up">875 → 989 (+13%)</span></div>
-              <div class="highlight success">Los Reyes y Coacalco son las estrellas emergentes. Su explosivo crecimiento sugiere apertura reciente o campaña muy exitosa.</div>
-            </div>
-          </div>
-          <div class="insight-card">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fee2e2">📉</div>
-              <div><div class="ic-title">Sedes en contracción</div><div class="ic-sub">Inscripciones que bajaron vs 2024</div></div>
-            </div>
-            <div class="ic-body">
-              <div class="stat-row"><span class="label">🔻 Querétaro</span><span class="value trend-down">719 → 588 (-18%)</span></div>
-              <div class="stat-row"><span class="label">🔻 Santa Cecilia</span><span class="value trend-down">1,308 → 1,149 (-12%)</span></div>
-              <div class="stat-row"><span class="label">🔻 Exhibimex</span><span class="value trend-down">1,318 → 1,178 (-11%)</span></div>
-              <div class="stat-row"><span class="label">🔻 Coapa</span><span class="value trend-down">1,386 → 1,253 (-10%)</span></div>
-              <div class="highlight warn">4 sedes perdieron volumen en 2025. Requieren diagnóstico de causas: competencia, experiencia, precio, o problemas operativos.</div>
-              <div style="margin-top:8px"><span class="action-tag red">⚑ Plan de rescate Querétaro</span><span class="action-tag amber">✓ Mystery shopper</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PROPUESTAS ACCION -->
-      <div class="insight-section">
-        <div class="insight-section-title">⚡ Propuestas de Acción Prioritarias</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-
-          <div class="insight-card" style="border-left:4px solid #e11d48">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fee2e2">🔥</div>
-              <div><div class="ic-title">URGENTE: Campaña de retención Q4</div><div class="ic-sub">Alta prioridad · impacto inmediato</div></div>
-            </div>
-            <div class="ic-body">
-              Junio es el mes con más bajas (11,796). Lanzar en <strong>Mayo</strong>: "Tu verano en el agua" — descuento en paquete trimestral para usuarios activos que renueven antes de junio.
-              <div class="highlight danger">Sin acción, perderás ~10,000 usuarios en el período verano-regreso a clases.</div>
-              <span class="action-tag red">⚑ Acción: Semana 1 Mayo</span><span class="action-tag amber">✓ Budget: campañas SMS/Email</span>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-left:4px solid #d97706">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#fef3c7">🎯</div>
-              <div><div class="ic-title">Programa de primeros 90 días</div><div class="ic-sub">El momento más crítico de retención</div></div>
-            </div>
-            <div class="ic-body">
-              18,193 usuarios inactivos nunca superaron los 3 meses. Implementar: <strong>check-in semana 2</strong>, clase con instructor a la <strong>semana 4</strong>, encuesta de satisfacción al <strong>mes 2</strong>, y recompensa por llegar al <strong>mes 3</strong>.
-              <div class="highlight warn">Si logras retener al 20% de los abandonos tempranos, recuperas ~3,600 usuarios activos adicionales.</div>
-              <span class="action-tag amber">✓ Protocolo de onboarding</span><span class="action-tag blue">✓ CRM / seguimiento</span>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-left:4px solid #10b981">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#dcfce7">👴</div>
-              <div><div class="ic-title">Expandir segmento Senior</div><div class="ic-sub">Mayor ROI y fidelidad</div></div>
-            </div>
-            <div class="ic-body">
-              Los mayores de 60 años tienen la mayor retención (24.2%) y estadía (~10 meses), pero son solo 8,766 de 104,497 inscritos (8.4%). La natación es el ejercicio de bajo impacto preferido por médicos para adultos mayores.
-              <div class="highlight success">Campaña con ISSSTE, IMSS, Seguro Popular. Horarios exclusivos matutinos. Clase de acuaeróbics senior. Potencial de duplicar este segmento.</div>
-              <span class="action-tag green">✓ Alianzas médicas</span><span class="action-tag blue">✓ Horarios diferenciados</span>
-            </div>
-          </div>
-
-          <div class="insight-card" style="border-left:4px solid #7c3aed">
-            <div class="ic-header">
-              <div class="ic-icon" style="background:#ede9fe">📱</div>
-              <div><div class="ic-title">Reactivación de base inactiva</div><div class="ic-sub">89,607 ex-usuarios a recuperar</div></div>
-            </div>
-            <div class="ic-body">
-              Segmentar inactivos por tiempo de baja:
-              <div class="stat-row"><span class="label">Baja reciente (&lt;6m)</span><span class="value">Alta probabilidad de regreso</span></div>
-              <div class="stat-row"><span class="label">Baja media (6-24m)</span><span class="value">Campaña de "te extrañamos"</span></div>
-              <div class="stat-row"><span class="label">Baja antigua (&gt;2a)</span><span class="value">Reinscripción como nuevo</span></div>
-              <div class="highlight">Si recuperas solo el 3% de inactivos = +2,688 activos. A $600/mes = $1.6M MXN mensuales adicionales.</div>
-              <span class="action-tag purple">✓ Email/WhatsApp blast</span><span class="action-tag amber">✓ Promo de regreso</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- REPORTES ADICIONALES -->
-      
-
-    </div><!-- /tab-insights -->
-
-  </div><!-- /screen-dash -->
-</div><!-- /main-wrap -->
-
-<div id="cs-overlay" onclick="closeAllCS()" style="position:fixed;inset:0;z-index:9998;display:none"></div>
-
-<!-- MODAL LONGEVOS -->
-<div id="longevos-modal">
-  <div id="modal-backdrop" onclick="closeLongevos()"></div>
-  <div id="modal-box">
-    <button id="modal-close" onclick="closeLongevos()">✕</button>
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
-      <span style="font-size:22px">🏆</span>
-      <h2 style="font-size:16px;font-weight:800;color:#0f172a" id="modal-title">Top 3 Más Longevos</h2>
-    </div>
-    <p style="font-size:12px;color:#94a3b8;margin-bottom:4px" id="modal-subtitle">—</p>
-    <div id="modal-cards"></div>
-    <div style="margin-top:16px;padding-top:12px;border-top:1px solid #e2e8f0">
-      <p style="font-size:11px;color:#94a3b8;text-align:center">💡 Estadía = Fecha Baja − Fecha Inscripción. Para activos se usa fecha de corte 23/06/2026.</p>
-    </div>
+  <div id="insights-dynamic-content">
+    <!-- populated by renderInsights() on every filter change -->
   </div>
-</div>
+
 
 <script>
 /* ══ EMBEDDED DATA ══ */
@@ -1298,7 +947,7 @@ function mkChart(id,cfg){if(CHARTS[id]){CHARTS[id].destroy();delete CHARTS[id];}
 function countBy(arr,key){const m={};arr.forEach(r=>{const v=r[key]||'(Sin dato)';m[v]=(m[v]||0)+1;});return m;}
 function sortedTop(obj,n=999){return Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,n);}
 
-function renderAllCharts(){renderTendencias();renderEstadia();renderSedes();renderCaptacion();renderPerfil();renderPromos();}
+function renderAllCharts(){renderTendencias();renderEstadia();renderSedes();renderCaptacion();renderPerfil();renderPromos();renderInsights();}
 
 /* ── TENDENCIAS ── */
 function renderTendencias(){
@@ -2026,6 +1675,115 @@ function renderLaunchDetail(sede){
 Chart.defaults.font.family="'Inter',system-ui,sans-serif";
 Chart.defaults.color='#94a3b8';
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeAllCS();closeLongevos();}});
+
+/* ══ INSIGHTS DINÁMICOS ══ */
+function renderInsights(){
+  const el = document.getElementById('insights-dynamic-content');
+  if(!el) return;
+
+  const total = FILT.length;
+  if(!total){ el.innerHTML='<p style="text-align:center;color:#94a3b8;padding:40px">Sin datos con el filtro actual.</p>'; return; }
+
+  const activos = FILT.filter(r=>r.estatus.toLowerCase()==='activo').length;
+  const inactivos = total - activos;
+  const pctAct = (activos/total*100).toFixed(1);
+  const pctInact = (inactivos/total*100).toFixed(1);
+  
+  // Estadía activos
+  const estadiasAct = FILT.filter(r=>r.estatus.toLowerCase()==='activo'&&r.estadia!=null).map(r=>r.estadia);
+  const estadiasInact = FILT.filter(r=>r.estatus.toLowerCase()!=='activo'&&r.estadia!=null).map(r=>r.estadia);
+  const avg = a => a.length ? (a.reduce((s,v)=>s+v,0)/a.length) : 0;
+  const med = a => { if(!a.length)return 0; const s=[...a].sort((x,y)=>x-y),m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; };
+  const fmtM = d => d<30?Math.round(d)+'d':d<365?(d/30.44).toFixed(1)+' m':(d/365.25).toFixed(1)+' a';
+
+  // Retención por sede
+  const bySede = {};
+  FILT.forEach(r=>{ if(!bySede[r.sede])bySede[r.sede]={t:0,a:0}; bySede[r.sede].t++; if(r.estatus.toLowerCase()==='activo')bySede[r.sede].a++; });
+  const sedeArr = Object.entries(bySede).map(([s,d])=>({s,t:d.t,a:d.a,ret:d.t?d.a/d.t*100:0})).sort((a,b)=>b.ret-a.ret);
+  const topSedes = sedeArr.slice(0,3);
+  const botSedes = [...sedeArr].sort((a,b)=>a.ret-b.ret).slice(0,3);
+
+  // Canal top retención (mín 30 usuarios)
+  const byCanal = {};
+  FILT.filter(r=>r.medio).forEach(r=>{ if(!byCanal[r.medio])byCanal[r.medio]={t:0,a:0}; byCanal[r.medio].t++; if(r.estatus.toLowerCase()==='activo')byCanal[r.medio].a++; });
+  const canalArr = Object.entries(byCanal).filter(([,d])=>d.t>=30).map(([c,d])=>({c,t:d.t,ret:d.a/d.t*100})).sort((a,b)=>b.ret-a.ret);
+  const topCanal = canalArr[0];
+
+  // Abandono temprano (<90 días)
+  const abandono = FILT.filter(r=>r.estatus.toLowerCase()!=='activo'&&r.estadia!=null&&r.estadia<90).length;
+  const pctAbandono = total ? (abandono/total*100).toFixed(1) : 0;
+
+  // Edad promedio
+  const edades = FILT.filter(r=>r.edad).map(r=>r.edad);
+  const edadProm = edades.length ? (avg(edades)).toFixed(1) : '—';
+
+  // Inscripciones recientes (últimos 30 días desde hoy)
+  const hoy = new Date();
+  const hace30 = new Date(hoy - 30*24*60*60*1000);
+  const recientes = FILT.filter(r=>r.inscDate&&r.inscDate>=hace30).length;
+
+  // Year with most inscriptions
+  const byYear = {};
+  FILT.filter(r=>r.inscDate).forEach(r=>{ const y=r.inscDate.getFullYear(); byYear[y]=(byYear[y]||0)+1; });
+  const bestYear = Object.entries(byYear).sort((a,b)=>b[1]-a[1])[0];
+
+  const card = (color, icon, title, sub, body, alert='') => `
+    <div class="insight-card" style="border-left:4px solid ${color};background:#fff;border:1px solid #e2e8f0;border-left-width:4px;border-left-color:${color};border-radius:10px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;background:${color}22">${icon}</div>
+        <div><div style="font-weight:700;font-size:13px;color:#0f172a">${title}</div><div style="font-size:11px;color:#94a3b8">${sub}</div></div>
+      </div>
+      <div style="font-size:13px;color:#475569;line-height:1.6">${body}</div>
+      ${alert?`<div style="margin-top:8px;padding:8px 10px;border-radius:6px;font-size:12px;background:#fef3c7;color:#92400e;border:1px solid #fde68a">${alert}</div>`:''}
+    </div>`;
+
+  const section = (title, cards) => `
+    <div style="margin-bottom:24px">
+      <div style="font-size:13px;font-weight:700;color:#475569;text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #e2e8f0">${title}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">${cards.join('')}</div>
+    </div>`;
+
+  el.innerHTML = `
+    <div style="padding:4px 0">
+      ${section('📊 Resumen ejecutivo', [
+        card('#0891b2','🏊','Base de usuarios',`${total.toLocaleString()} registros filtrados`,
+          `<strong>${activos.toLocaleString()} activos</strong> (${pctAct}%) y <strong>${inactivos.toLocaleString()} inactivos</strong> (${pctInact}%).`,
+          inactivos/total > 0.8 ? `El ${pctInact}% de la base está inactiva — oportunidad de reactivación.` : ''),
+        card('#10b981','📈','Mejor año de captación', bestYear?`${bestYear[0]} · ${bestYear[1].toLocaleString()} inscritos`:'Sin datos',
+          bestYear?`<strong>${bestYear[0]}</strong> fue el año con más inscripciones con <strong>${bestYear[1].toLocaleString()}</strong> nuevos usuarios.`:'Sin datos suficientes.', ''),
+        card('#f59e0b','⚠️','Abandono temprano','Inactivos con < 90 días de estadía',
+          `<strong>${abandono.toLocaleString()} usuarios</strong> (${pctAbandono}% del total) se dieron de baja antes de los 3 meses.`,
+          parseFloat(pctAbandono)>15?'Crítico: más del 15% abandona en los primeros 90 días. Revisar onboarding.':''),
+        card('#8b5cf6','👤','Perfil típico',`Edad promedio: ${edadProm} años`,
+          `Edad promedio del grupo filtrado: <strong>${edadProm} años</strong>. Inscripciones últimos 30 días: <strong>${recientes}</strong>.`, ''),
+      ])}
+
+      ${section('🏢 Retención por sede', [
+        card('#10b981','🏆','Sedes con mayor retención','Top 3',
+          topSedes.map(s=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9"><span>${s.s}</span><span style="font-weight:700;color:#10b981">${s.ret.toFixed(1)}% · ${s.a.toLocaleString()} activos</span></div>`).join(''), ''),
+        card('#ef4444','⚠️','Sedes con mayor churn','Top 3',
+          botSedes.map(s=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9"><span>${s.s}</span><span style="font-weight:700;color:#ef4444">${(100-s.ret).toFixed(1)}% churn · ${(s.t-s.a).toLocaleString()} inactivos</span></div>`).join(''),
+          ''),
+      ])}
+
+      ${canalArr.length ? section('📣 Canales de captación', [
+        card('#0ea5e9','⭐','Canal con mayor retención', topCanal?`${topCanal.c} · ${topCanal.t} usuarios`:'',
+          topCanal?`<strong>${topCanal.c}</strong> tiene la mayor retención con <strong>${topCanal.ret.toFixed(1)}%</strong> de sus ${topCanal.t} usuarios activos.`:'', 
+          topCanal&&topCanal.ret>30?'Escalar la inversión en este canal puede mejorar significativamente la retención global.':''),
+        card('#7c3aed','📊','Ranking de canales por retención',`Mín. 30 usuarios`,
+          canalArr.slice(0,5).map((c,i)=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f1f5f9"><span>${i+1}. ${c.c.length>25?c.c.slice(0,23)+'…':c.c}</span><span style="font-weight:700">${c.ret.toFixed(1)}%</span></div>`).join(''), ''),
+      ]) : ''}
+
+      ${estadiasAct.length ? section('⏱️ Estadía', [
+        card('#0891b2','✅','Estadía — Activos',`Promedio · Mediana · Moda`,
+          `Promedio: <strong>${fmtM(avg(estadiasAct))}</strong> · Mediana: <strong>${fmtM(med(estadiasAct))}</strong>`, ''),
+        card('#64748b','❌','Estadía — Inactivos',`Promedio · Mediana`,
+          `Promedio: <strong>${fmtM(avg(estadiasInact))}</strong> · Mediana: <strong>${fmtM(med(estadiasInact))}</strong>`,
+          med(estadiasInact)<90?'La mediana de estadía de inactivos es menor a 3 meses — el período crítico de retención.':''),
+      ]) : ''}
+    </div>`;
+}
+
 window.addEventListener('load',()=>loadPreloaded());
 window.setMsg=setMsg;
 window.initDashFromRecords=initDashFromRecords;
