@@ -1766,6 +1766,85 @@ function renderInsights(){
           ''),
       ])}
 
+      ${section('🔄 Churn y Rotación mensual', [
+        card('#e11d48','📉','Churn promedio mensual','Tasa de abandono por mes',
+          (() => {
+            // Group bajas by month
+            const bajasByMonth = {};
+            FILT.filter(r=>r.bajaDate).forEach(r=>{
+              const k = r.bajaDate.getFullYear()+'-'+String(r.bajaDate.getMonth()+1).padStart(2,'0');
+              bajasByMonth[k] = (bajasByMonth[k]||0) + 1;
+            });
+            const meses = Object.keys(bajasByMonth).sort().slice(-24); // últimos 24 meses
+            if(!meses.length) return 'Sin datos de bajas suficientes.';
+            const tasas = meses.map(m => {
+              // Activos al inicio del mes = inscritos antes de ese mes y sin baja o baja después
+              const [y,mo] = m.split('-').map(Number);
+              const inicioMes = new Date(y, mo-1, 1);
+              const activosInicioMes = FILT.filter(r => {
+                if(!r.inscDate || r.inscDate >= inicioMes) return false;
+                if(r.bajaDate && r.bajaDate < inicioMes) return false;
+                return true;
+              }).length;
+              return activosInicioMes > 0 ? (bajasByMonth[m] / activosInicioMes * 100) : 0;
+            }).filter(t => t > 0);
+            if(!tasas.length) return 'Sin datos suficientes.';
+            const churnProm = (tasas.reduce((s,v)=>s+v,0)/tasas.length).toFixed(2);
+            const churnAnual = (1 - Math.pow(1 - parseFloat(churnProm)/100, 12)) * 100;
+            return \`Churn mensual promedio (últimos \${meses.length} meses): <strong>\${churnProm}%</strong><br>
+              Equivale a un churn anual estimado de <strong>\${churnAnual.toFixed(1)}%</strong>.<br>
+              <div style="margin-top:8px">
+                \${tasas.slice(-6).map((t,i)=>\`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f1f5f9;font-size:12px"><span>\${meses.slice(-6)[i]}</span><span style="font-weight:600;color:\${t>5?'#ef4444':t>3?'#f59e0b':'#10b981'}">\${t.toFixed(2)}%</span></div>\`).join('')}
+              </div>\`;
+          })(),
+          ''),
+        card('#7c3aed','🔁','Rotación mensual media','Altas vs Bajas por mes',
+          (() => {
+            const altasByMonth = {};
+            const bajasByMonth2 = {};
+            FILT.filter(r=>r.inscDate).forEach(r=>{
+              const k = r.inscDate.getFullYear()+'-'+String(r.inscDate.getMonth()+1).padStart(2,'0');
+              altasByMonth[k] = (altasByMonth[k]||0) + 1;
+            });
+            FILT.filter(r=>r.bajaDate).forEach(r=>{
+              const k = r.bajaDate.getFullYear()+'-'+String(r.bajaDate.getMonth()+1).padStart(2,'0');
+              bajasByMonth2[k] = (bajasByMonth2[k]||0) + 1;
+            });
+            const allMonths = [...new Set([...Object.keys(altasByMonth), ...Object.keys(bajasByMonth2)])].sort().slice(-24);
+            if(allMonths.length < 2) return 'Sin datos suficientes.';
+            const rotaciones = allMonths.map(m => {
+              const altas = altasByMonth[m]||0;
+              const bajas = bajasByMonth2[m]||0;
+              return { m, altas, bajas, neta: altas - bajas, rotacion: (altas + bajas) / 2 };
+            });
+            const mediaAltas = (rotaciones.reduce((s,r)=>s+r.altas,0)/rotaciones.length).toFixed(0);
+            const mediaBajas = (rotaciones.reduce((s,r)=>s+r.bajas,0)/rotaciones.length).toFixed(0);
+            const mediaRot = (rotaciones.reduce((s,r)=>s+r.rotacion,0)/rotaciones.length).toFixed(0);
+            const mediaNeta = (rotaciones.reduce((s,r)=>s+r.neta,0)/rotaciones.length).toFixed(0);
+            const signo = parseFloat(mediaNeta) >= 0 ? '+' : '';
+            return \`Promedio mensual (últimos \${allMonths.length} meses):<br>
+              <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="background:#f0fdf4;border-radius:6px;padding:8px;text-align:center">
+                  <div style="font-size:18px;font-weight:800;color:#10b981">\${mediaAltas}</div>
+                  <div style="font-size:11px;color:#64748b">altas/mes</div>
+                </div>
+                <div style="background:#fef2f2;border-radius:6px;padding:8px;text-align:center">
+                  <div style="font-size:18px;font-weight:800;color:#ef4444">\${mediaBajas}</div>
+                  <div style="font-size:11px;color:#64748b">bajas/mes</div>
+                </div>
+                <div style="background:#f5f3ff;border-radius:6px;padding:8px;text-align:center">
+                  <div style="font-size:18px;font-weight:800;color:#7c3aed">\${mediaRot}</div>
+                  <div style="font-size:11px;color:#64748b">rotación media</div>
+                </div>
+                <div style="background:\${parseFloat(mediaNeta)>=0?'#f0fdf4':'#fef2f2'};border-radius:6px;padding:8px;text-align:center">
+                  <div style="font-size:18px;font-weight:800;color:\${parseFloat(mediaNeta)>=0?'#10b981':'#ef4444'}">\${signo}\${mediaNeta}</div>
+                  <div style="font-size:11px;color:#64748b">variación neta</div>
+                </div>
+              </div>\`;
+          })(),
+          ''),
+      ])}
+
       ${canalArr.length ? section('📣 Canales de captación', [
         card('#0ea5e9','⭐','Canal con mayor retención', topCanal?`${topCanal.c} · ${topCanal.t} usuarios`:'',
           topCanal?`<strong>${topCanal.c}</strong> tiene la mayor retención con <strong>${topCanal.ret.toFixed(1)}%</strong> de sus ${topCanal.t} usuarios activos.`:'', 
