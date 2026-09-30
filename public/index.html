@@ -1767,80 +1767,163 @@ function renderInsights(){
       ])}
 
       ${section('🔄 Churn y Rotación mensual', [
-        card('#e11d48','📉','Churn promedio mensual','Tasa de abandono por mes',
+        card('#e11d48','📉','Churn promedio mensual','Tasa de abandono por mes · histórico total de la sede',
           (() => {
-            // Group bajas by month
+            // Determinar el período a mostrar según el filtro activo del dashboard
+            const hoy = new Date();
+            let fechaDesde = null;
+            if(dateFrom) {
+              fechaDesde = new Date(dateFrom);
+            } else if(periodMonths) {
+              fechaDesde = new Date(hoy);
+              fechaDesde.setMonth(fechaDesde.getMonth() - periodMonths);
+            } else {
+              // Sin filtro de período: mostrar últimos 24 meses
+              fechaDesde = new Date(hoy);
+              fechaDesde.setMonth(fechaDesde.getMonth() - 24);
+            }
+            const fechaHasta = dateTo ? new Date(dateTo) : hoy;
+
+            // Construir lista de meses del período seleccionado
+            const mesesPeriodo = [];
+            const cur = new Date(fechaDesde.getFullYear(), fechaDesde.getMonth(), 1);
+            const fin = new Date(fechaHasta.getFullYear(), fechaHasta.getMonth(), 1);
+            while(cur <= fin) {
+              mesesPeriodo.push(cur.getFullYear() + '-' + String(cur.getMonth()+1).padStart(2,'0'));
+              cur.setMonth(cur.getMonth() + 1);
+            }
+            if(!mesesPeriodo.length) return 'Sin período definido.';
+
+            // IMPORTANTE: usar RAW (histórico completo) filtrado solo por sede
+            // El denominador debe ser el histórico total, no el período seleccionado
+            const sedesActivas = selSedes && selSedes.length > 0 ? selSedes : null;
+            const baseHistorica = RAW.filter(r => sedesActivas ? sedesActivas.includes(r.sede) : true);
+
+            // Agrupar bajas del histórico completo por mes
             const bajasByMonth = {};
-            FILT.filter(r=>r.bajaDate).forEach(r=>{
+            baseHistorica.filter(r=>r.bajaDate).forEach(r=>{
               const k = r.bajaDate.getFullYear()+'-'+String(r.bajaDate.getMonth()+1).padStart(2,'0');
               bajasByMonth[k] = (bajasByMonth[k]||0) + 1;
             });
-            const meses = Object.keys(bajasByMonth).sort().slice(-24); // últimos 24 meses
-            if(!meses.length) return 'Sin datos de bajas suficientes.';
-            const tasas = meses.map(m => {
-              // Activos al inicio del mes = inscritos antes de ese mes y sin baja o baja después
+
+            // Calcular churn para cada mes del período
+            const resultados = mesesPeriodo.map(m => {
               const [y,mo] = m.split('-').map(Number);
               const inicioMes = new Date(y, mo-1, 1);
-              const activosInicioMes = FILT.filter(r => {
+              // Activos al inicio del mes = inscritos ANTES del mes, activos en esa fecha
+              // Usar histórico completo (baseHistorica), no FILT
+              const activosInicioMes = baseHistorica.filter(r => {
                 if(!r.inscDate || r.inscDate >= inicioMes) return false;
                 if(r.bajaDate && r.bajaDate < inicioMes) return false;
                 return true;
               }).length;
-              return activosInicioMes > 0 ? (bajasByMonth[m] / activosInicioMes * 100) : 0;
-            }).filter(t => t > 0);
-            if(!tasas.length) return 'Sin datos suficientes.';
+              const bajas = bajasByMonth[m] || 0;
+              const tasa = activosInicioMes > 0 ? (bajas / activosInicioMes * 100) : 0;
+              return { m, bajas, activosInicioMes, tasa };
+            }).filter(r => r.activosInicioMes > 0);
+
+            if(!resultados.length) return 'Sin datos suficientes para el período seleccionado.';
+
+            const tasas = resultados.map(r=>r.tasa);
             const churnProm = (tasas.reduce((s,v)=>s+v,0)/tasas.length).toFixed(2);
             const churnAnual = (1 - Math.pow(1 - parseFloat(churnProm)/100, 12)) * 100;
-            return `Churn mensual promedio (últimos ${meses.length} meses): <strong>${churnProm}%</strong><br>
-              Equivale a un churn anual estimado de <strong>${churnAnual.toFixed(1)}%</strong>.<br>
-              <div style="margin-top:8px">
-                ${tasas.slice(-6).map((t,i)=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #f1f5f9;font-size:12px"><span>${meses.slice(-6)[i]}</span><span style="font-weight:600;color:${t>5?'#ef4444':t>3?'#f59e0b':'#10b981'}">${t.toFixed(2)}%</span></div>`).join('')}
+            const periodoLabel = periodMonths ? `últimos ${periodMonths} meses` : `${mesesPeriodo[0]} → ${mesesPeriodo[mesesPeriodo.length-1]}`;
+
+            return `Churn promedio (<em>${periodoLabel}</em>): <strong>${churnProm}%</strong><br>
+              Churn anual estimado: <strong>${churnAnual.toFixed(1)}%</strong><br>
+              <div style="margin-top:10px">
+                ${resultados.map(r=>`
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #f1f5f9;font-size:12px">
+                    <span style="color:#64748b">${r.m}</span>
+                    <span style="color:#94a3b8;font-size:11px">${r.bajas} bajas / ${r.activosInicioMes.toLocaleString()} activos</span>
+                    <span style="font-weight:700;color:${r.tasa>5?'#ef4444':r.tasa>3?'#f59e0b':'#10b981'}">${r.tasa.toFixed(2)}%</span>
+                  </div>`).join('')}
               </div>`;
           })(),
           ''),
-        card('#7c3aed','🔁','Rotación mensual media','Altas vs Bajas por mes',
+        card('#7c3aed','🔁','Rotación mensual media','Altas vs Bajas · período seleccionado · histórico total sede',
           (() => {
+            // Mismo período que churn
+            const hoy = new Date();
+            let fechaDesde = null;
+            if(dateFrom) {
+              fechaDesde = new Date(dateFrom);
+            } else if(periodMonths) {
+              fechaDesde = new Date(hoy);
+              fechaDesde.setMonth(fechaDesde.getMonth() - periodMonths);
+            } else {
+              fechaDesde = new Date(hoy);
+              fechaDesde.setMonth(fechaDesde.getMonth() - 24);
+            }
+            const fechaHasta = dateTo ? new Date(dateTo) : hoy;
+
+            const mesesPeriodo = [];
+            const cur = new Date(fechaDesde.getFullYear(), fechaDesde.getMonth(), 1);
+            const fin = new Date(fechaHasta.getFullYear(), fechaHasta.getMonth(), 1);
+            while(cur <= fin) {
+              mesesPeriodo.push(cur.getFullYear() + '-' + String(cur.getMonth()+1).padStart(2,'0'));
+              cur.setMonth(cur.getMonth() + 1);
+            }
+            if(mesesPeriodo.length < 1) return 'Sin período definido.';
+
+            // Usar RAW filtrado solo por sede (histórico completo)
+            const sedesActivas = selSedes && selSedes.length > 0 ? selSedes : null;
+            const baseHistorica = RAW.filter(r => sedesActivas ? sedesActivas.includes(r.sede) : true);
+
             const altasByMonth = {};
-            const bajasByMonth2 = {};
-            FILT.filter(r=>r.inscDate).forEach(r=>{
+            const bajasByMonth = {};
+            baseHistorica.filter(r=>r.inscDate).forEach(r=>{
               const k = r.inscDate.getFullYear()+'-'+String(r.inscDate.getMonth()+1).padStart(2,'0');
               altasByMonth[k] = (altasByMonth[k]||0) + 1;
             });
-            FILT.filter(r=>r.bajaDate).forEach(r=>{
+            baseHistorica.filter(r=>r.bajaDate).forEach(r=>{
               const k = r.bajaDate.getFullYear()+'-'+String(r.bajaDate.getMonth()+1).padStart(2,'0');
-              bajasByMonth2[k] = (bajasByMonth2[k]||0) + 1;
+              bajasByMonth[k] = (bajasByMonth[k]||0) + 1;
             });
-            const allMonths = [...new Set([...Object.keys(altasByMonth), ...Object.keys(bajasByMonth2)])].sort().slice(-24);
-            if(allMonths.length < 2) return 'Sin datos suficientes.';
-            const rotaciones = allMonths.map(m => {
-              const altas = altasByMonth[m]||0;
-              const bajas = bajasByMonth2[m]||0;
-              return { m, altas, bajas, neta: altas - bajas, rotacion: (altas + bajas) / 2 };
-            });
-            const mediaAltas = (rotaciones.reduce((s,r)=>s+r.altas,0)/rotaciones.length).toFixed(0);
-            const mediaBajas = (rotaciones.reduce((s,r)=>s+r.bajas,0)/rotaciones.length).toFixed(0);
-            const mediaRot = (rotaciones.reduce((s,r)=>s+r.rotacion,0)/rotaciones.length).toFixed(0);
-            const mediaNeta = (rotaciones.reduce((s,r)=>s+r.neta,0)/rotaciones.length).toFixed(0);
+
+            const rotaciones = mesesPeriodo.map(m => ({
+              m,
+              altas: altasByMonth[m]||0,
+              bajas: bajasByMonth[m]||0,
+              neta: (altasByMonth[m]||0) - (bajasByMonth[m]||0),
+              rotacion: ((altasByMonth[m]||0) + (bajasByMonth[m]||0)) / 2
+            }));
+
+            const n = rotaciones.length;
+            const mediaAltas = (rotaciones.reduce((s,r)=>s+r.altas,0)/n).toFixed(0);
+            const mediaBajas = (rotaciones.reduce((s,r)=>s+r.bajas,0)/n).toFixed(0);
+            const mediaRot = (rotaciones.reduce((s,r)=>s+r.rotacion,0)/n).toFixed(0);
+            const mediaNeta = (rotaciones.reduce((s,r)=>s+r.neta,0)/n).toFixed(0);
             const signo = parseFloat(mediaNeta) >= 0 ? '+' : '';
-            return `Promedio mensual (últimos ${allMonths.length} meses):<br>
-              <div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            const periodoLabel = periodMonths ? `últimos ${periodMonths} meses` : `${mesesPeriodo[0]} → ${mesesPeriodo[mesesPeriodo.length-1]}`;
+
+            return `<div style="font-size:12px;color:#64748b;margin-bottom:8px">Período: <em>${periodoLabel}</em></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
                 <div style="background:#f0fdf4;border-radius:6px;padding:8px;text-align:center">
-                  <div style="font-size:18px;font-weight:800;color:#10b981">${mediaAltas}</div>
+                  <div style="font-size:22px;font-weight:800;color:#10b981">${mediaAltas}</div>
                   <div style="font-size:11px;color:#64748b">altas/mes</div>
                 </div>
                 <div style="background:#fef2f2;border-radius:6px;padding:8px;text-align:center">
-                  <div style="font-size:18px;font-weight:800;color:#ef4444">${mediaBajas}</div>
+                  <div style="font-size:22px;font-weight:800;color:#ef4444">${mediaBajas}</div>
                   <div style="font-size:11px;color:#64748b">bajas/mes</div>
                 </div>
                 <div style="background:#f5f3ff;border-radius:6px;padding:8px;text-align:center">
-                  <div style="font-size:18px;font-weight:800;color:#7c3aed">${mediaRot}</div>
+                  <div style="font-size:22px;font-weight:800;color:#7c3aed">${mediaRot}</div>
                   <div style="font-size:11px;color:#64748b">rotación media</div>
                 </div>
                 <div style="background:${parseFloat(mediaNeta)>=0?'#f0fdf4':'#fef2f2'};border-radius:6px;padding:8px;text-align:center">
-                  <div style="font-size:18px;font-weight:800;color:${parseFloat(mediaNeta)>=0?'#10b981':'#ef4444'}">${signo}${mediaNeta}</div>
+                  <div style="font-size:22px;font-weight:800;color:${parseFloat(mediaNeta)>=0?'#10b981':'#ef4444'}">${signo}${mediaNeta}</div>
                   <div style="font-size:11px;color:#64748b">variación neta</div>
                 </div>
-              </div>`;
+              </div>
+              <div style="font-size:11px;color:#94a3b8;margin-bottom:6px">Detalle mensual:</div>
+              ${rotaciones.map(r=>`
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid #f1f5f9;font-size:11px">
+                  <span style="color:#64748b;width:60px">${r.m}</span>
+                  <span style="color:#10b981">↑${r.altas}</span>
+                  <span style="color:#ef4444">↓${r.bajas}</span>
+                  <span style="font-weight:600;color:${r.neta>=0?'#10b981':'#ef4444'}">${r.neta>=0?'+':''}${r.neta}</span>
+                </div>`).join('')}`;
           })(),
           ''),
       ])}
