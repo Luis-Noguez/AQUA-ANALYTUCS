@@ -253,16 +253,43 @@ async function doUpload(){
         for(const sede of sedesAfectadas){
           setStatus('loading',`Actualizando ${sede}… (${done+1}/${sedesAfectadas.length})`);
           setProg(15+Math.round(done/sedesAfectadas.length*80));
-          const docRef=window.fsDoc(window.db,'sedes',sede);
+
+          // Leer TODOS los chunks existentes de la sede
+          const safeSede=sede.replace(/\s/g,'_').replace(/é/g,'e').replace(/á/g,'a').replace(/í/g,'i').replace(/ñ/g,'n').replace(/ó/g,'o').replace(/ú/g,'u');
           let existing=[];
-          try{const snap=await window.fsGet(docRef);if(snap.exists())existing=snap.data().records||[];}catch(e){}
+          for(let ci=0;ci<60;ci++){
+            try{
+              const snap=await window.fsGet(window.fsDoc(window.db,'sedes',safeSede+'_'+ci));
+              if(!snap.exists()) break;
+              existing=existing.concat(snap.data().records||[]);
+            }catch(e){break;}
+          }
+
+          // Aplicar actualizaciones de estatus/baja
           const byId={};
           existing.forEach(r=>{byId[r.i]=r;});
           bySede[sede].forEach(upd=>{
-            if(byId[upd.i])byId[upd.i]={...byId[upd.i],e:upd.e,b:upd.b,n:upd.n};
-            else notFound++;
+            if(byId[upd.i]){
+              byId[upd.i]={...byId[upd.i],e:upd.e,b:upd.b,n:upd.n};
+              // Recalcular estadía si hay fecha de baja
+              if(upd.b && byId[upd.i].d){
+                const iD=new Date(byId[upd.i].d+'T00:00:00');
+                const bD=new Date(upd.b+'T00:00:00');
+                byId[upd.i].t=Math.round((bD-iD)/86400000);
+              }
+            } else notFound++;
           });
-          await window.fsSet(docRef,{records:Object.values(byId),sede,updatedAt:new Date().toISOString()});
+
+          // Guardar en chunks de 500 registros (mismo formato que la carga inicial)
+          const merged=Object.values(byId);
+          const CHUNK=500;
+          const chunks=[];
+          for(let i=0;i<merged.length;i+=CHUNK) chunks.push(merged.slice(i,i+CHUNK));
+          for(let ci=0;ci<chunks.length;ci++){
+            await window.fsSet(window.fsDoc(window.db,'sedes',safeSede+'_'+ci),{
+              records:chunks[ci],sede,chunk:ci,totalChunks:chunks.length,updatedAt:new Date().toISOString()
+            });
+          }
           done++;
         }
         if(notFound>0)console.warn(notFound+' IDs no encontrados en la base');
